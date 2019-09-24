@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mybatis sql映射文件 -->
+<!-- namespace：整合到spring之后，要求它的值必须与dao接口的全路径名一致 -->
+<mapper namespace="com.aco.my.restaurant.admin.order.dao.OrderDao">
+    <select id="findByCondition1" resultType="com.my.restaurant.domain.Order"
+            parameterType="com.my.restaurant.domain.Order">
+        select * from a_order where 1=1
+        <if test="userId!=null">
+            and userId like #{userId}
+        </if>
+    </select>
+    <!-- 删除 -->
+    <delete id="deleteStudent" parameterType="int">
+        delete from a_order where oid=#{oid}
+    </delete>
+</mapper>

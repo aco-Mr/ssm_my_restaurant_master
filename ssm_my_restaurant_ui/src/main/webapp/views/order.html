@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>order</title>
+    <script src="/ssm_my_restaurant_ui/static/js/jquery/jquery-1.8.3.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(function () {
+            onQuery(1)
+        });
+
+        function onQuery(pageNum) {
+            var json = {userId: $("#userId").val()};
+            $.ajax({
+                url: '/ssm_my_restaurant_admin_order/order/list',
+                data: {pageNum: pageNum, pageSize: 2, order: JSON.stringify(json)},
+                type: 'post',
+                dataType: 'json',
+                success: function (data) {
+                    var html = [];
+                    // 1、判断数组中是否有数据
+                    if (data.list) {
+                        var trTemplate = $("#tfoot").html();
+                        $.each(data.list, function (i, ele) {
+                            var tr = trTemplate;
+                            tr = tr.replace(/{oid}/g, ele.oid);
+                            tr = tr.replace(/{did}/g, ele.did);
+                            tr = tr.replace(/{userId}/g, ele.userId);
+                            tr = tr.replace(/{clientNums}/g, ele.clientNums);
+                            tr = tr.replace(/{discount}/g, ele.discount);
+                            tr = tr.replace(/{teaFee}/g, ele.teaFee);
+                            tr = tr.replace(/{totalPrice}/g, ele.totalPrice);
+                            tr = tr.replace(/{startDateTime}/g, ele.startDateTime);
+                            tr = tr.replace(/{payTime}/g, ele.payTime);
+                            tr = tr.replace(/{isPay}/g, ele.isPay);
+                            html.push(tr);
+                        })
+                    } else {
+                        html.push('<tr><td colspan="5">没有数据</td>');
+                    }
+                    // 2、将tr的数组的内容添加到tbody
+                    $("#tbody").html(html.join());
+                    // 3、保存相关的数据
+                    $("#lblPageNum").html(data.pageNum);
+                    $("#lblPages").html(data.pages);
+                    $("#lblPageSize").html(data.pageSize);
+                    $("#lblTotal").html(data.total);
+
+                    $("#pageInfos").html("");
+                    $.each(data.navigatepageNums, function (i, ele) {
+                        if (ele == data.pageNum) {
+                            $("#pageInfos").append('<a>' + ele + '</a>');
+                        } else {
+                            $("#pageInfos").append('<a href="javascript:onQuery(' + ele + ')">' + ele + '</a>');
+                        }
+                    });
+                }
+            })
+        }
+
+        $(function () {
+            //初始化页面
+            onQuery(1);
+            $("#btnQuery").click(function () {
+                var stuName = $("#stuName").val().trim();
+                var stuNo = $("#stuNo").val().trim();
+                onQuery(1);
+            });
+        });
+        // _type表示要做什么
+        // _type=1：跳到首页
+        function onJumpPage(_type) {
+            var pageNum = parseInt($("#lblPageNum").html());// 当前页码
+            var pages = parseInt($("#lblPages").html());// 总页码
+            if (_type == 1) {//首页
+                if (pageNum > 1) {
+                    onQuery(1);
+                }
+            } else if (_type == 2) {//上一页
+                if (pageNum > 1) {
+                    onQuery(pageNum - 1);
+                }
+            } else if (_type == 3) {//下一页
+                if (pageNum < pages) {
+                    onQuery(pageNum + 1);
+                }
+            } else if (_type == 4) {//末页
+                if (pageNum < pages) {
+                    onQuery(pages);
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+<table border="1">
+    <tr>
+        <td>用户编号</td>
+        <td><input type="text" id="userId"  value="1"/></td>
+    </tr>
+    <tr>
+        <td colspan="2" align="right">
+            <input type="button" id="btnQuery" value="查询" />
+        </td>
+    </tr>
+</table>
+<table border="1">
+    <thead>
+    <tr>
+        <th>订单编号</th>
+        <th>餐桌编号</th>
+        <th>用户编号</th>
+        <th>客户数量</th>
+        <th>折扣</th>
+        <th>茶位费</th>
+        <th>总价</th>
+        <th>下单时间</th>
+        <th>买单时间</th>
+        <th>是否支付</th>
+    </tr>
+    </thead>
+    <tbody id="tbody">
+
+    </tbody>
+    <tfoot style="display: none" id="tfoot">
+    <tr>
+        <td>{oid}</td>
+        <td>{did}</td>
+        <td>{userId}</td>
+        <td>{clientNums}</td>
+        <td>{discount}</td>
+        <td>{teaFee}</td>
+        <td>{totalPrice}</td>
+        <td>{startDateTime}</td>
+        <td>{payTime}</td>
+        <td>{isPay}</td>
+    </tr>
+    </tfoot>
+</table>
+<div>
+    当前<label id="lblPageNum"></label>/<label id="lblPages"></label>页，
+    每页显示<label id="lblPageSize"></label>条,共<label id="lblTotal"></label>条记录。
+    <a href="javascript:onJumpPage(1)">首页</a>
+    <a href="javascript:onJumpPage(2)">上一页</a>
+    <label id="pageInfos"></label>
+    <a href="javascript:onJumpPage(3)">下一页</a>
+    <a href="javascript:onJumpPage(4)">末页</a>
+</div>
+</body>
+</html>
