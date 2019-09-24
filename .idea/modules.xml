@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ssm_my_restaurant_api/ssm_my_restaurant_admin/ssm_my_restaurant_admin.iml" filepath="$PROJECT_DIR$/ssm_my_restaurant_api/ssm_my_restaurant_admin/ssm_my_restaurant_admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ssm_my_restaurant_api/ssm_my_restaurant_api.iml" filepath="$PROJECT_DIR$/ssm_my_restaurant_api/ssm_my_restaurant_api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ssm_my_restaurant_commons/ssm_my_restaurant_commons.iml" filepath="$PROJECT_DIR$/ssm_my_restaurant_commons/ssm_my_restaurant_commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ssm_my_restaurant_dependencies/ssm_my_restaurant_dependencies.iml" filepath="$PROJECT_DIR$/ssm_my_restaurant_dependencies/ssm_my_restaurant_dependencies.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ssm_my_restaurant_domain/ssm_my_restaurant_domain.iml" filepath="$PROJECT_DIR$/ssm_my_restaurant_domain/ssm_my_restaurant_domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ssm_my_restaurant_master.iml" filepath="$PROJECT_DIR$/.idea/ssm_my_restaurant_master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ssm_my_restaurant_api/ssm_my_restaurant_userview/ssm_my_restaurant_order/ssm_my_restaurant_order.iml" filepath="$PROJECT_DIR$/ssm_my_restaurant_api/ssm_my_restaurant_userview/ssm_my_restaurant_order/ssm_my_restaurant_order.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ssm_my_restaurant_ui/ssm_my_restaurant_ui.iml" filepath="$PROJECT_DIR$/ssm_my_restaurant_ui/ssm_my_restaurant_ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ssm_my_restaurant_api/ssm_my_restaurant_userview/ssm_my_restaurant_userview.iml" filepath="$PROJECT_DIR$/ssm_my_restaurant_api/ssm_my_restaurant_userview/ssm_my_restaurant_userview.iml" />
+    </modules>
+  </component>
+</project>

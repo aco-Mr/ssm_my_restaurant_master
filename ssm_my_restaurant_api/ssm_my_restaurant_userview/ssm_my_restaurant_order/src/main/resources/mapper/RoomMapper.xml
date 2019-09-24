@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mybatis sql映射文件 -->
+<!-- namespace：整合到spring之后，要求它的值必须与dao接口的全路径名一致 -->
+<mapper namespace="com.my.restaurant.api.od.dao.RoomDao">
+
+    <resultMap id="roomMap" type="com.my.restaurant.domain.Room">
+        <id property="rid" column="rid" />
+        <result property="rname" column="rname" />
+        <result property="rsize" column="rsize" />
+        <result property="rstatue" column="rstatue" />
+        <result property="details" column="details" />
+
+        <collection property="desks" column="rid" select="com.my.restaurant.api.od.dao.DeskDao"/>
+    </resultMap>
+
+    <select id="findAll" resultType="Room">
+        select * from a_room
+    </select>
+
+</mapper>

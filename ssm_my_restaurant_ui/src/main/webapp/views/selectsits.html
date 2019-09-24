@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在线选座</title>
+
+    <script src="../static/js/jquery/jquery-1.8.3.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(function () {
+            //全局变量
+            var roomName=new String();
+
+            $.ajax({
+                url: 'http://localhost:8080/order//room/findRooms',
+                type: 'post',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.data) {
+                        var html = [];
+                        $.each(data.data, function (i, ele) {
+                            var str = " <li class='room'><span>" + ele.rname + "</span><span STYLE='display: none' >"+ele.rid+"</span> </li>";
+                            html.push(str);
+                        });
+                        $("#rooms").html(html);
+                    }
+                }
+            });
+
+            //查找桌子
+            function findRoomDesk(rid) {
+                $.ajax({
+                    url: 'http://localhost:8080/order//desk/findRoomDesk',
+                    data: {rid: rid},
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.data) {
+                            var html=[];
+                            $.each(data.data, function (i, ele) {
+                                var str=new String();
+                                if(ele.dstatue==0){
+                                     str = "<li class='desk desk0'> <input type='checkbox' name='desk' value='"+ele.did+"' />" + ele.did + "号桌&nbsp;&nbsp;&nbsp;&nbsp;"+ele.dvolum+"人桌</input><br>";
+                                }else {
+                                    str = "<li class='desk desk1' >" + ele.did + "号桌&nbsp;&nbsp;&nbsp;&nbsp;"+ele.dvolum+"人桌</input><br>";
+                                }
+                                html.push(str);
+                            });
+                            $("#sits").html(html);
+                        }
+                    }
+                });
+            }
+
+            $(document).on("click",".room",function () {
+                roomName = $(this).children("span:eq(0)").text();
+                $(".room").removeClass("clickRoom");
+                $(this).addClass("clickRoom");
+                var rid = parseInt($(this).children("span:eq(1)").text());
+                findRoomDesk(rid);
+            });
+
+            $(document).on("click","#btn",function () {
+                var deskInfo="当前所选："+roomName+"  ";
+                var dids=[];
+                 $("input[name=desk]:checked").each(function (i) {
+                     dids.push($(this).val());
+                     deskInfo+=$(this).val()+"号桌   "
+                 });
+
+                var searchUrl = encodeURI("http://localhost:8080/ui/views/menus.html?&deskInfo="
+                    + deskInfo + "&dids="+dids);
+                window.location.href = searchUrl;
+                // $.ajax({
+                //         type:"POST",
+                //         dataType:"json",
+                //         url:"http://localhost:8080/ui/views/menus.html",//请求页面
+                //         data:{deskInfo:deskInfo,dids:dids},
+                //         complete:function(){location.href ="http://localhost:8080/ui/views/menus.html"}//跳转页面
+                // });
+            });
+
+        })
+    </script>
+
+<!--    样式-->
+    <style type="text/css">
+        .desk0{
+            background-color: skyblue;
+        }
+        .desk1{
+            background-color: red;
+        }
+        .clickRoom{
+            background-color:grey;
+        }
+        .room{
+            padding-top: 3px;
+        }
+        .desk{
+            margin-top: 10px;
+            margin-right: 50px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div style="width: 200px ;height: 300px;float: left">
+      <ul id="rooms" style="list-style-type:none">
+
+      </ul>
+    </div>
+    <div  style="width: 400px ;height: 300px;float: left;background: grey">
+        <ul id="sits" style="list-style-type:none">
+
+        </ul>
+    </div>
+    <input type="button" value="确定" id="btn" style="margin-left: -50px; margin-top: 310px">
+
+</div>
+
+</body>
+</html>

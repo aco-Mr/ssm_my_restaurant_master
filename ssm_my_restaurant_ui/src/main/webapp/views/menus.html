@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>选菜</title>
+    <script src="../static/js/jquery/jquery-1.8.3.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var searchUrl = window.location.href;
+        var qs = searchUrl.split("&");
+        var json = "{";
+        if (qs) {
+            for (var i = 1; i < qs.length; i++) {
+                //得到键
+                var j = qs[i].indexOf("=");
+                var fin = qs[i].substring(0, j);//截取键
+                //alert(fin);
+                json += "\"" + fin + "\":";
+                //得到值
+                var searchData = qs[i].split("=");
+                var searchText = decodeURI(searchData[1]); //decodeURI解码
+                // alert(searchText);  //将搜索的数据显示在搜索页面的搜索框中
+                json += "\"" + searchText + "\"";
+                if (i < qs.length - 1)
+                    json += ",";
+                if (i == qs.length - 1)
+                    json += "}"
+            }//string转化为json
+            alert(json);
+        }
+
+        function name() {//必须在<body>标签中加οnlοad="name()"属性，页面加载完再执行该js
+            var jsonobj = eval("(" + json + ")");//string转换 json对象
+            var deskInfo = jsonobj.deskInfo;//获取值
+            var dids = jsonobj.dids;
+            $(function () {
+                alert(deskInfo);
+                $("#head").html(deskInfo);
+            });
+        }
+
+        //食物类型
+        $(function () {
+            $.ajax({
+                url: 'http://localhost:8080/order//menus/findGoodsStyle',
+                type: 'post',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.data) {
+                        var html = [];
+                        $.each(data.data, function (i, ele) {
+                            var str = " <li class='gtype'><span>" + ele.gtype + "</span></li>";
+                            html.push(str);
+                        });
+                        $("#goodsType").html(html);
+                    }
+                }
+            });
+        });
+
+        function goodsByType(){
+
+        }
+
+
+    </script>
+</head>
+<body onload="name()">
+<div>
+    <div id="head"></div>
+    <div>
+        <ul id="goodsType" style="list-style-type:none">
+
+        </ul>
+    </div>
+</div>
+</body>
+</html>

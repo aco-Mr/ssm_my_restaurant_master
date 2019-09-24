@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ssm_my_restaurant_admin" />
+        <module name="ssm_my_restaurant_commons" />
+        <module name="ssm_my_restaurant_domain" />
+        <module name="ssm_my_restaurant_order" />
+        <module name="ssm_my_restaurant_ui" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ssm_my_restaurant_admin" target="1.8" />
+      <module name="ssm_my_restaurant_api" target="1.8" />
+      <module name="ssm_my_restaurant_commons" target="1.8" />
+      <module name="ssm_my_restaurant_dependencies" target="1.8" />
+      <module name="ssm_my_restaurant_domain" target="1.5" />
+      <module name="ssm_my_restaurant_master" target="1.5" />
+      <module name="ssm_my_restaurant_order" target="1.8" />
+      <module name="ssm_my_restaurant_ui" target="1.5" />
+      <module name="ssm_my_restaurant_userview" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

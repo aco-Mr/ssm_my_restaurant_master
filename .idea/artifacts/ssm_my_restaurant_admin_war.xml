@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ssm_my_restaurant_admin:war">
+    <output-path>$PROJECT_DIR$/ssm_my_restaurant_api/ssm_my_restaurant_admin/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>ssm_my_restaurant_admin</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="ssm_my_restaurant_admin-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="ssm_my_restaurant_admin:war exploded" />
+    </root>
+  </artifact>
+</component>
