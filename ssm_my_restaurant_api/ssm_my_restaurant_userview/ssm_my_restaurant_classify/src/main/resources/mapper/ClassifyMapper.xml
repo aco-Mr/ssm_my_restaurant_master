@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aco.my.restaurant.classify.dao.ClassifyDao">
+
+    <insert id="addClassify" parameterType="com.my.restaurant.domain.Classify">
+        insert into a_classify(cid,phone,date)
+        values (#{cid},#{phone},#{date})
+    </insert>
+
+    <update id="createClassify" parameterType="com.my.restaurant.domain.Classify">
+        UPDATE a_classify SET
+        <if test="phone!=null">
+            phone=#{phone}
+        </if>
+        <where>
+            <if test="cid!=null">
+                and cid = #{cid}
+            </if>
+        </where>
+    </update>
+
+    <select id="getAll" resultType="com.my.restaurant.domain.Classify">
+        select cid, phone, date, state from a_classify
+    </select>
+
+    <select id="findDate" resultType="com.my.restaurant.domain.Classify">
+        select cid, phone, date, state from a_classify
+        <where>
+            <choose>
+                <!-- 查找本日内的座位号 -->
+                <when test="condition==0">
+                    and TO_DAYS(NOW())-TO_DAYS(DATE) &lt;= 0
+                    order by date
+                </when>
+                <!-- 查找一周内的座位号 -->
+                <when test="condition==1">
+                    <!-- &gt大于 -->
+                    and DATE_SUB(CURDATE(),INTERVAL 7 DAY) &lt;= DATE(#{date})
+                    order by date desc
+                </when>
+                <!-- 查找一个月内的座位号 -->
+                <when test="condition==2">
+                    <!-- &lt小于 -->
+                    and DATE_SUB(CURDATE(),INTERVAL 30 DAY) &lt;= DATE(#{date})
+                    order by date desc
+                </when>
+            </choose>
+        </where>
+    </select>
+</mapper>
