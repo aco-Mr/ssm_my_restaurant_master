@@ -12,10 +12,6 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderDao orderDao;
-    @Override
-    public List<Order> findAll() {
-        return orderDao.findAll();
-    }
 
     @Override
     public List<Order> findByCondition1(Order order) {

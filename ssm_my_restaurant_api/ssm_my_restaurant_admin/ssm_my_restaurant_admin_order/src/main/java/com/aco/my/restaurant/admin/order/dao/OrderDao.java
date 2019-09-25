@@ -8,8 +8,6 @@ import java.util.List;
 @Repository
 public interface OrderDao {
 
-    //查全部订单
-    public List<Order> findAll();
     // 按条件查询
     public List<Order> findByCondition1(Order order);
     //删除订单

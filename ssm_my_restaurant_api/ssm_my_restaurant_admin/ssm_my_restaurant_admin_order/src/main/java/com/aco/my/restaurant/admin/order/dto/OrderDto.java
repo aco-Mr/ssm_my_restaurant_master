@@ -13,23 +13,14 @@ public class OrderDto {
     private String startDateTime; //下单时间
     private String payTime;  //买单时间
     private Integer isPay; //是否支付
+    private Integer state;
 
-    public OrderDto() {
+    public Integer getState() {
+        return state;
     }
 
-    public OrderDto(Integer oid, Integer did, Integer userId,
-                    Integer clientNums, Double discount, Integer teaFee,
-                    Double totalPrice, String startDateTime, String payTime, Integer isPay) {
-        this.oid = oid;
-        this.did = did;
-        this.userId = userId;
-        this.clientNums = clientNums;
-        this.discount = discount;
-        this.teaFee = teaFee;
-        this.totalPrice = totalPrice;
-        this.startDateTime = startDateTime;
-        this.payTime = payTime;
-        this.isPay = isPay;
+    public void setState(Integer state) {
+        this.state = state;
     }
 
     public Integer getOid() {
@@ -126,6 +117,7 @@ public class OrderDto {
                 ", startDateTime='" + startDateTime + '\'' +
                 ", payTime='" + payTime + '\'' +
                 ", isPay=" + isPay +
+                ", state=" + state +
                 '}';
     }
 }

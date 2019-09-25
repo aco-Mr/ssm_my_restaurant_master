@@ -22,12 +22,8 @@ public class OrderController {
 
     @PostMapping("/list")
     public PageInfo<Order> list(String order,Integer pageNum,Integer pageSize) throws Exception {
-        System.out.println("list");
-        System.out.println("order:"+order);
         Order order1 = MapperUtils.json2pojo(order,Order.class);
-        System.out.println("order1:"+order1);
         PageHelper.startPage(pageNum,pageSize);
-//        System.out.println("order:"+order);
         List<Order> list = orderService.findByCondition1(order1);
         list.forEach(s-> System.out.println(s));
         //将Po的数据拷贝到Dto中
@@ -36,4 +32,5 @@ public class OrderController {
         PageInfo<Order> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }
+
 }

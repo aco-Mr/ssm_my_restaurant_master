@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>order</title>
+<title>订单管理系统</title>
     <script src="/ssm_my_restaurant_ui/static/js/jquery/jquery-1.8.3.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
         $(function () {
             onQuery(1)
         });
-
         function onQuery(pageNum) {
             var json = {userId: $("#userId").val()};
             $.ajax({
@@ -31,8 +30,21 @@
                             tr = tr.replace(/{teaFee}/g, ele.teaFee);
                             tr = tr.replace(/{totalPrice}/g, ele.totalPrice);
                             tr = tr.replace(/{startDateTime}/g, ele.startDateTime);
+                            tr = tr.replace(/{eatStartTime}/g, ele.eatStartTime);
+                            tr = tr.replace(/{eatTime}/g, ele.eatTime);
                             tr = tr.replace(/{payTime}/g, ele.payTime);
-                            tr = tr.replace(/{isPay}/g, ele.isPay);
+                            if(ele.isPay==0){
+                                tr = tr.replace(/{isPay}/g, "是");
+                            }else if(ele.isPay==1){
+                                tr = tr.replace(/{isPay}/g, "否");
+                            }
+                            if(ele.state==0){
+                                tr = tr.replace(/{state}/g, "未处理");
+                            }else if(ele.state==1){
+                                tr = tr.replace(/{state}/g, "已完成");
+                            }else{
+                                tr = tr.replace(/{state}/g, "等待支付");
+                            }
                             html.push(tr);
                         })
                     } else {
@@ -62,8 +74,7 @@
             //初始化页面
             onQuery(1);
             $("#btnQuery").click(function () {
-                var stuName = $("#stuName").val().trim();
-                var stuNo = $("#stuNo").val().trim();
+                var userId = $("#userId").val();
                 onQuery(1);
             });
         });
@@ -91,60 +102,133 @@
             }
         }
     </script>
+  <style type="text/css">
+<!--
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+
+html { overflow-x: auto; overflow-y: auto; border:0;} 
+-->
+.CTitle{
+    background:#6795B4;
+    padding:5px;
+    text-align:left;
+    color:#FFFFFF;
+    font-size:13px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+.right-text09 {
+    font-family: Tahoma;
+    font-size: 11px;
+    font-weight: bold;
+    color: #F26521;
+    text-decoration: none;
+}
+.right-font08 {
+    font-family: "����";
+    font-size: 16px;
+    color: #555555;
+    text-decoration: none;
+}
+</style>
 </head>
 <body>
-<table border="1">
-    <tr>
-        <td>用户编号</td>
-        <td><input type="text" id="userId"  value="1"/></td>
-    </tr>
-    <tr>
-        <td colspan="2" align="right">
-            <input type="button" id="btnQuery" value="查询" />
-        </td>
-    </tr>
-</table>
-<table border="1">
-    <thead>
-    <tr>
-        <th>订单编号</th>
-        <th>餐桌编号</th>
-        <th>用户编号</th>
-        <th>客户数量</th>
-        <th>折扣</th>
-        <th>茶位费</th>
-        <th>总价</th>
-        <th>下单时间</th>
-        <th>买单时间</th>
-        <th>是否支付</th>
-    </tr>
-    </thead>
-    <tbody id="tbody">
+<form name="fom" id="fom" method="post" action="">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  
+  <tr>
+    <td height="30">      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td height="62" background="/ssm_my_restaurant_ui/static/images/nav04.gif">
+            
+		   <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
+		    <tr>
+			  <td width="21"><img src="/ssm_my_restaurant_ui/static/images/ico07.gif" width="20" height="18" /></td>
+			  <td width="538">查看内容：按用户编号：
+<input type="text" id="userId"/>
+<input id="btnQuery" type="button" class="right-button02" value="查 询" /></td>
+		    </tr>
+          </table></td>
+        </tr>
+    </table></td></tr>
+  <tr>
+    <td><table id="subtree1"  width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+                <td height="40" class="font42">
+				<table width="100%" border="0" cellpadding="4" cellspacing="1" bgcolor="#464646" class="newfont03">
+                    <thead>
+				 <tr class="CTitle" >
+                    	<td height="22" colspan="15" align="center" style="font-size:16px">订单详细列表</td>
+                  </tr>
+                 <tr bgcolor="#EEEEEE">
+                    <td width="8%">订单编号</td>
+					<td width="8%">餐桌编号</td>
+					<td width="8%">用户编号</td>
+                    <td width="8%">客户数量</td>
+					<td width="6%">折扣</td>
+					<td width="7%">茶位费</td>
+					<td width="6%">总价</td>
+					<td width="10%">下单时间</td>
+					<td width="10%">就餐时间</td>
+					<td width="10%">就餐时长</td>
+					<td width="10%">买单时间</td>
+					<td width="8%">是否支付</td>
+					<td width="6%">状态</td>
+                  </tr>
+                    </thead>
+                    <tbody id="tbody">
 
-    </tbody>
-    <tfoot style="display: none" id="tfoot">
-    <tr>
-        <td>{oid}</td>
-        <td>{did}</td>
-        <td>{userId}</td>
-        <td>{clientNums}</td>
-        <td>{discount}</td>
-        <td>{teaFee}</td>
-        <td>{totalPrice}</td>
-        <td>{startDateTime}</td>
-        <td>{payTime}</td>
-        <td>{isPay}</td>
-    </tr>
-    </tfoot>
+                    </tbody>
+                    <tfoot style="display: none" id="tfoot">
+                    <tr bgcolor="#FFFFFF">
+                        <td>{oid}</td>
+                        <td>{did}</td>
+                        <td>{userId}</td>
+                        <td>{clientNums}</td>
+                        <td>{discount}</td>
+                        <td>{teaFee}</td>
+                        <td>{totalPrice}</td>
+                        <td>{startDateTime}</td>
+                        <td>{eatStartTime}</td>
+                        <td>{eatTime}</td>
+                        <td>{payTime}</td>
+                        <td>{isPay}</td>
+                        <td>{state}</td>
+                    </tr>
+                    </tfoot>
+            </table>
+                </td>
+          </table></tr>
+        <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+            <tr>
+                <td height="6"><img src="/ssm_my_restaurant_ui/static/images/spacer.gif" width="1" height="1"/></td>
+            </tr>
+            <tr>
+                <td height="33">
+                    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="right-font08">
+                        <tr>
+                            <td width="50%">第 <label id="lblPageNum" class="right-text09"></label> 页 | 共 <label
+                                    id="lblPages" class="right-text09"></label> 页，
+                                每页显示 <label id="lblPageSize" class="right-text09"></label> 条,
+                                共 <label id="lblTotal" class="right-text09"></label> 条记录
+                            </td>
+                            <td width="50%" align="right">[<a href="javascript:onJumpPage(1)" class="right-font08">首页</a> | <a
+                                    href="javascript:onJumpPage(2)" class="right-font08">上一页</a>
+                                |   <label id="pageInfos" class="right-font08"></label>    | <a href="javascript:onJumpPage(3)" class="right-font08">下一页</a>
+                                | <a href="javascript:onJumpPage(4)" class="right-font08">末页</a>]
+                    </table>
+                </td>
+            </tr>
+        </table></td>
+        </tr>
+      </table></td>
+  </tr>
 </table>
-<div>
-    当前<label id="lblPageNum"></label>/<label id="lblPages"></label>页，
-    每页显示<label id="lblPageSize"></label>条,共<label id="lblTotal"></label>条记录。
-    <a href="javascript:onJumpPage(1)">首页</a>
-    <a href="javascript:onJumpPage(2)">上一页</a>
-    <label id="pageInfos"></label>
-    <a href="javascript:onJumpPage(3)">下一页</a>
-    <a href="javascript:onJumpPage(4)">末页</a>
-</div>
+</form>
 </body>
 </html>

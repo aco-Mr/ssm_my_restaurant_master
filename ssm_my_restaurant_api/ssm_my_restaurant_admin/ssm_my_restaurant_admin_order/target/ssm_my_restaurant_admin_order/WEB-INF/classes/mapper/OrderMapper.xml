@@ -12,7 +12,7 @@
         </if>
     </select>
     <!-- 删除 -->
-    <delete id="deleteStudent" parameterType="int">
-        delete from a_order where oid=#{oid}
-    </delete>
+<!--    <delete id="daleteOrder" parameterType="int">-->
+<!--        delete from a_order where oid=#{oid}-->
+<!--    </delete>-->
 </mapper>

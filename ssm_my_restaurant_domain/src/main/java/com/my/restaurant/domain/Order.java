@@ -15,6 +15,7 @@ public class Order {
     private String eatTime;
     private String payTime;
     private Integer isPay;
+    private Integer state;
 
     public Integer getOid() {
         return oid;
@@ -112,6 +113,14 @@ public class Order {
         this.isPay = isPay;
     }
 
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -127,6 +136,7 @@ public class Order {
                 ", eatTime='" + eatTime + '\'' +
                 ", payTime='" + payTime + '\'' +
                 ", isPay=" + isPay +
+                ", state=" + state +
                 '}';
     }
 }
