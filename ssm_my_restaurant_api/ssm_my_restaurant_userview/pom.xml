@@ -15,6 +15,7 @@
     <name>ssm_my_restaurant_userview Maven Webapp</name>
     <modules>
         <module>ssm_my_restaurant_classify</module>
+        <module>ssm_my_restaurant_account</module>
     </modules>
 
 </project>

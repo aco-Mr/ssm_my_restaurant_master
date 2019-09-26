@@ -3,12 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aco.my.restaurant.classify.dao.ClassifyDao">
 
-    <insert id="addClassify">
+    <insert id="addClassify" parameterType="com.my.restaurant.domain.Classify">
         insert into a_classify(cid,phone,date)
         values (#{cid},#{phone},#{date})
     </insert>
 
-    <update id="createClassify">
+    <update id="createClassify" parameterType="com.my.restaurant.domain.Classify">
         UPDATE a_classify SET
         <if test="phone!=null">
             phone=#{phone}

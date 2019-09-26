@@ -18,6 +18,7 @@
     <modules>
         <module>ssm_my_restaurant_admin</module>
         <module>ssm_my_restaurant_userview</module>
+        <module>exercise</module>
     </modules>
 
     <dependencies>
