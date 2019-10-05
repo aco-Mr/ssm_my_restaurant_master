@@ -14,7 +14,7 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
-    <name>ssm_my_restaurant_api</name>
+    <name>ssm_my_restaurant_api Maven Webapp</name>
     <modules>
         <module>ssm_my_restaurant_admin</module>
         <module>ssm_my_restaurant_userview</module>
@@ -85,6 +85,10 @@
             <artifactId>druid</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
@@ -111,5 +115,7 @@
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
         </dependency>
+        <!--   通用的数据传输格式  -->
+        
     </dependencies>
 </project>

@@ -40,6 +40,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
         <pagehelper.version>4.0.0</pagehelper.version>
+        <fastjson.version>1.2.59</fastjson.version>
     </properties>
 
     <!--
@@ -228,6 +229,12 @@
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper</artifactId>
                 <version>${pagehelper.version}</version>
+            </dependency>
+            <!--   通用的数据传输格式  -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
             </dependency>
         </dependencies>
 

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MyBatisCodeHelperDatasource">
+    <option name="projectProfile">
+      <ProjectProfile>
+        <option name="javaMapperPackage" value="com.aco.my.restaurant.user.mapper" />
+        <option name="javaMapperPath" value="E:\java\ideaIU-2019.1.3.exe\week11\ssm_my_restaurant_master\ssm_my_restaurant_api\ssm_my_restaurant_userview\ssm_my_restaurant_user\src\main\java" />
+        <option name="javaModelPackage" value="com.my.restaurant.domain.po" />
+        <option name="javaModelPath" value="$PROJECT_DIR$/ssm_my_restaurant_domain/src/main/java" />
+        <option name="lastDatabaseCrudChooseModuleName" value="ssm_my_restaurant_domain" />
+        <option name="moduleNameToPackageAndPathMap">
+          <map>
+            <entry key="ssm_my_restaurant_domain">
+              <value>
+                <UserPackageAndPathInfoByModule>
+                  <option name="javaMapperPackage" value="com.aco.my.restaurant.user.mapper" />
+                  <option name="javaMapperPath" value="E:\java\ideaIU-2019.1.3.exe\week11\ssm_my_restaurant_master\ssm_my_restaurant_api\ssm_my_restaurant_userview\ssm_my_restaurant_user\src\main\java" />
+                  <option name="javaModelPacakge" value="com.my.restaurant.domain.po" />
+                  <option name="javaModelPath" value="$PROJECT_DIR$/ssm_my_restaurant_domain/src/main/java" />
+                  <option name="xmlPackage" value="mapper" />
+                  <option name="xmlPath" value="E:\java\ideaIU-2019.1.3.exe\week11\ssm_my_restaurant_master\ssm_my_restaurant_api\ssm_my_restaurant_userview\ssm_my_restaurant_user\src\main\resources" />
+                </UserPackageAndPathInfoByModule>
+              </value>
+            </entry>
+          </map>
+        </option>
+        <option name="tableGenerateConfigs">
+          <map>
+            <entry key="my1905:a_collect">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="collect_id" />
+                  <option name="javaModelName" value="ACollect" />
+                  <option name="moduleName" value="ssm_my_restaurant_domain" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="my1905:a_goods">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="gid" />
+                  <option name="javaModelName" value="AGoods" />
+                  <option name="moduleName" value="ssm_my_restaurant_domain" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="my1905:a_order">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="oid" />
+                  <option name="javaModelName" value="AOrder" />
+                  <option name="moduleName" value="ssm_my_restaurant_domain" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="my1905:a_order_goods">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="id" />
+                  <option name="javaModelName" value="AOrderGoods" />
+                  <option name="moduleName" value="ssm_my_restaurant_domain" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="my1905:a_price">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="pid" />
+                  <option name="javaModelName" value="APrice" />
+                  <option name="moduleName" value="ssm_my_restaurant_domain" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="my1905:a_user">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="uid" />
+                  <option name="javaModelName" value="AUser" />
+                  <option name="moduleName" value="ssm_my_restaurant_domain" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="my1905:user">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="id" />
+                  <option name="javaModelName" value="User" />
+                  <option name="moduleName" value="ssm_my_restaurant_domain" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+          </map>
+        </option>
+        <option name="useLomBokOnModel" value="true" />
+        <option name="xmlMapperPackage" value="mapper" />
+        <option name="xmlMapperPath" value="E:\java\ideaIU-2019.1.3.exe\week11\ssm_my_restaurant_master\ssm_my_restaurant_api\ssm_my_restaurant_userview\ssm_my_restaurant_user\src\main\resources" />
+      </ProjectProfile>
+    </option>
+  </component>
+</project>

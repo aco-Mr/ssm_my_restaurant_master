@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/ssm_my_restaurant_api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ssm_my_restaurant_api/ssm_my_restaurant_admin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ssm_my_restaurant_api/ssm_my_restaurant_userview" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ssm_my_restaurant_api/ssm_my_restaurant_userview/ssm_my_restaurant_user" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ssm_my_restaurant_commons" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ssm_my_restaurant_dependencies" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ssm_my_restaurant_domain" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ssm_my_restaurant_ui" charset="UTF-8" />
+  </component>
+</project>

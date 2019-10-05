@@ -7,7 +7,7 @@
         <packaging>war</packaging>
       </options>
     </properties>
-    <root id="archive" name="ssm_my_restaurant_user.war">
+    <root id="archive" name="ssm_my_restaurant_user-1.0-SNAPSHOT.war">
       <element id="artifact" artifact-name="ssm_my_restaurant_user:war exploded" />
     </root>
   </artifact>

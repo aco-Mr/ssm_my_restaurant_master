@@ -9,9 +9,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.aco</groupId>
     <artifactId>ssm_my_restaurant_userview</artifactId>
-    <packaging>war</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <name>ssm_my_restaurant_userview Maven Webapp</name>
+    <modules>
+        <module>ssm_my_restaurant_user</module>
+    </modules>
 
 </project>
