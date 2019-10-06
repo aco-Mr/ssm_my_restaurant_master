@@ -3,10 +3,13 @@ package com.aco.my.restaurant.account.web.controller;
 import com.aco.my.restaurant.account.api.OrderApi;
 import com.aco.my.restaurant.account.dto.OrderDto;
 import com.aco.my.restaurant.account.service.OrderDtoService;
+import com.my.restaurant.dto.BaseResult;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/account")
@@ -15,15 +18,15 @@ public class OrderController {
     @Autowired
     private OrderDtoService orderDtoService;
 
-    /**
-     * 结算
-     * @param oid 订单Id
-     * @return
-     */
+//    /**
+//     * 结算
+//     * @param oid 订单Id
+//     * @return
+//     */
 //    @GetMapping("/getAccount")
-//    public BaseResult account(Integer oid,ModelMap modelMap) throws Exception {
+//    public BaseResult account(Integer oid, ModelMap modelMap) throws Exception {
 //        //通过获取Session获取用户Id
-//        Object user = modelMap.get("user");
+//        User user = modelMap.get("user");
 //        List<OrderDto> list=null;
 //        //判断
 //        if(oid!=null&&user.getUid!=null){
