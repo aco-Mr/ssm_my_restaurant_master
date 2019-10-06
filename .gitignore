@@ -6,6 +6,7 @@
 .idea
 configure
 test
+target
 *.iml
 out
 gen

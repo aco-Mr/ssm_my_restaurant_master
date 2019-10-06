@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aco.my.restaurant.goods.dao.PriceMapper">
+  <resultMap id="BaseResultMap" type="com.my.restaurant.domain.Price">
+    <!--@mbg.generated-->
+    <id column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="gid" jdbcType="INTEGER" property="gid" />
+    <result column="ptime" jdbcType="DATE" property="ptime" />
+    <result column="price" jdbcType="FLOAT" property="price" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    pid, gid, ptime, price
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from a_price
+    where pid = #{pid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from a_price
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.my.restaurant.domain.Price">
+    <!--@mbg.generated-->
+    insert into a_price (pid, gid, ptime, 
+      price)
+    values (#{pid,jdbcType=INTEGER}, #{gid,jdbcType=INTEGER}, #{ptime,jdbcType=DATE}, 
+      #{price,jdbcType=FLOAT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.my.restaurant.domain.Price">
+    <!--@mbg.generated-->
+    insert into a_price
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="gid != null">
+        gid,
+      </if>
+      <if test="ptime != null">
+        ptime,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="gid != null">
+        #{gid,jdbcType=INTEGER},
+      </if>
+      <if test="ptime != null">
+        #{ptime,jdbcType=DATE},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=FLOAT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.my.restaurant.domain.Price">
+    <!--@mbg.generated-->
+    update a_price
+    <set>
+      <if test="gid != null">
+        gid = #{gid,jdbcType=INTEGER},
+      </if>
+      <if test="ptime != null">
+        ptime = #{ptime,jdbcType=DATE},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=FLOAT},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.my.restaurant.domain.Price">
+    <!--@mbg.generated-->
+    update a_price
+    set gid = #{gid,jdbcType=INTEGER},
+      ptime = #{ptime,jdbcType=DATE},
+      price = #{price,jdbcType=FLOAT}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+
+
+  <insert id="insertPrice">
+    insert into a_price(gid, ptime, price)
+    values (#{price.gid},#{price.ptime},#{price.price})
+  </insert>
+
+  <select id="selectByGoodsId" resultMap="BaseResultMap">
+    select pid, gid, ptime, price
+    from a_price
+    where gid=#{gid} order by ptime desc limit 0,1
+  </select>
+</mapper>

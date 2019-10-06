@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aco.my.restaurant.goods.dao.GoodsMapper">
+  <resultMap id="BaseResultMap" type="com.my.restaurant.domain.Goods">
+    <!--@mbg.generated-->
+    <id column="gid" jdbcType="INTEGER" property="gid" />
+    <result column="gname" jdbcType="BLOB" property="gname" />
+    <result column="gtype" jdbcType="VARCHAR" property="gtype" />
+    <result column="gimag" jdbcType="VARCHAR" property="gimag" />
+    <result column="gaddtime" jdbcType="DATE" property="gaddtime" />
+    <result column="gdetails" jdbcType="BLOB" property="gdetails" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    gid, gname, gtype, gimag, gaddtime, gdetails
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from a_goods
+    where gid = #{gid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from a_goods
+    where gid = #{gid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.my.restaurant.domain.Goods">
+    <!--@mbg.generated-->
+    insert into a_goods (gid, gname, gtype, 
+      gimag, gaddtime, gdetails
+      )
+    values (#{gid,jdbcType=INTEGER}, #{gname,jdbcType=BLOB}, #{gtype,jdbcType=VARCHAR}, 
+      #{gimag,jdbcType=VARCHAR}, #{gaddtime,jdbcType=DATE}, #{gdetails,jdbcType=BLOB}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.my.restaurant.domain.Goods">
+    <!--@mbg.generated-->
+    insert into a_goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="gid != null">
+        gid,
+      </if>
+      <if test="gname != null">
+        gname,
+      </if>
+      <if test="gtype != null">
+        gtype,
+      </if>
+      <if test="gimag != null">
+        gimag,
+      </if>
+      <if test="gaddtime != null">
+        gaddtime,
+      </if>
+      <if test="gdetails != null">
+        gdetails,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="gid != null">
+        #{gid,jdbcType=INTEGER},
+      </if>
+      <if test="gname != null">
+        #{gname,jdbcType=BLOB},
+      </if>
+      <if test="gtype != null">
+        #{gtype,jdbcType=VARCHAR},
+      </if>
+      <if test="gimag != null">
+        #{gimag,jdbcType=VARCHAR},
+      </if>
+      <if test="gaddtime != null">
+        #{gaddtime,jdbcType=DATE},
+      </if>
+      <if test="gdetails != null">
+        #{gdetails,jdbcType=BLOB},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.my.restaurant.domain.Goods">
+    <!--@mbg.generated-->
+    update a_goods
+    <set>
+      <if test="gname != null">
+        gname = #{gname,jdbcType=BLOB},
+      </if>
+      <if test="gtype != null">
+        gtype = #{gtype,jdbcType=VARCHAR},
+      </if>
+      <if test="gimag != null">
+        gimag = #{gimag,jdbcType=VARCHAR},
+      </if>
+      <if test="gaddtime != null">
+        gaddtime = #{gaddtime,jdbcType=DATE},
+      </if>
+      <if test="gdetails != null">
+        gdetails = #{gdetails,jdbcType=BLOB},
+      </if>
+    </set>
+    where gid = #{gid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.my.restaurant.domain.Goods">
+    <!--@mbg.generated-->
+    update a_goods
+    set gname = #{gname,jdbcType=BLOB},
+      gtype = #{gtype,jdbcType=VARCHAR},
+      gimag = #{gimag,jdbcType=VARCHAR},
+      gaddtime = #{gaddtime,jdbcType=DATE},
+      gdetails = #{gdetails,jdbcType=BLOB}
+    where gid = #{gid,jdbcType=INTEGER}
+  </update>
+
+  <resultMap id="GoodsMap" type="com.my.restaurant.domain.Goods">
+    <id column="gid" property="gid" />
+    <result column="gname" property="gname" />
+    <result column="gtype" property="gtype" />
+    <result column="gimag" property="gimag" />
+    <result column="gaddtime" property="gaddtime" />
+    <result column="gdetails" property="gdetails" />
+    <result column="gstate" property="gstate"/>
+  </resultMap>
+
+
+  <!-- 添加 -->
+  <insert id="insertGoods" keyColumn="gid" keyProperty="goods.gid" useGeneratedKeys="true">
+    insert into a_goods(gname, gtype, gimag, gaddtime, gdetails)
+    values (#{goods.gname},#{goods.gtype},#{goods.gimag},#{goods.gaddtime},#{goods.gdetails})
+  </insert>
+
+  <!-- 按条件查询 -->
+  <select id="selectGoods" resultMap="GoodsMap">
+    select gid, gname, gtype, gimag, gaddtime, gstate, gdetails
+    from a_goods
+    <where>
+      <if test="goods.gid!=null">
+        and gid=#{goods.gid}
+      </if>
+      <if test="goods.gname!=null">
+        and gname = #{goods.gname}
+      </if>
+      <if test="goods.gtype!=null">
+        and gtype=#{goods.gtype}
+      </if>
+      <if test="goods.gstate!=null">
+        and gstate=#{goods.gstate}
+      </if>
+      and gstate!=2
+    </where>
+  </select>
+
+  <!-- 进行假删除-->
+  <update id="delGoods">
+    update a_goods set gstate=2
+    where gid=#{gid}
+  </update>
+
+  <!-- 修改菜品-->
+  <update id="updateGood">
+    update a_goods
+    <set>
+      <if test="goods.gstate!=null ">
+        gstate=#{goods.gstate},
+      </if>
+      <if test="goods.gname!=null">
+        gname=#{goods.gname},
+      </if>
+      <if test="goods.gtype!=null">
+        gtype=#{goods.gtype},
+      </if>
+      <if test="goods.gdetails!=null">
+        gdetails=#{goods.gdetails},
+      </if>
+      <if test="goods.gimag!=null">
+        gimag=#{goods.gimag}
+      </if>
+    </set>
+    where gid=#{goods.gid}
+  </update>
+
+</mapper>

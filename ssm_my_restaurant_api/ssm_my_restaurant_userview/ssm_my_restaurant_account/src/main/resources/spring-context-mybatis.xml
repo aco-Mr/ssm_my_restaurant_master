@@ -19,6 +19,6 @@
 
     <!-- 扫描 Mapper -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.my.restaurant.account.dao" />
+        <property name="basePackage" value="com.aco.my.restaurant.account.dao" />
     </bean>
 </beans>

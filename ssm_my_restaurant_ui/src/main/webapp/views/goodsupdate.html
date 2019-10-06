@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>项目管理系统 by www.mycodes.net</title>
+<style type="text/css">
+<!--
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+.tabfont01 {	
+	font-family: "宋体";
+	font-size: 9px;
+	color: #555555;
+	text-decoration: none;
+	text-align: center;
+}
+.font051 {font-family: "宋体";
+	font-size: 12px;
+	color: #333333;
+	text-decoration: none;
+	line-height: 20px;
+}
+.font201 {font-family: "宋体";
+	font-size: 12px;
+	color: #FF0000;
+	text-decoration: none;
+}
+.button {
+	font-family: "宋体";
+	font-size: 14px;
+	height: 37px;
+}
+html { overflow-x: auto; overflow-y: auto; border:0;} 
+-->
+</style>
+
+<link href="../static/js/bootstrap/css/css.css" rel="stylesheet" type="text/css" />
+<link href="../static/js/bootstrap/css/style.css" rel="stylesheet" type="text/css" />
+<script src="../static/js/bootstrap/js/jquery/jquery-1.11.0.js"></script>
+<script src="../static/js/bootstrap/js/jquery.validate/jquery.form.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            /**
+             * 页面初始化
+             **/
+            let gid = getUrlParam('gid');
+            let data = {
+                "pageNum":1,
+                "pageSize":1,
+                "condition":gid
+            };
+            $.ajax({
+                url:"/goods/goods/findGoods",
+                type:"get",
+                data:data,
+                dataType:"json",
+                contentType:"application/json;charset=utf-8",
+                success:function (data) {
+                    if(data!=null){
+                        $("#tbody>tr:eq(0)").append('<td>'+data.data.listGoodsVo[0].gid+'</td><td><input type="text" value="'+data.data.listGoodsVo[0].gid+'" disabled></td>');
+                        $("#tbody>tr:eq(1)").append('<td>'+data.data.listGoodsVo[0].gname+'</td><td><input type="text" id="gname"></td>');
+                        $("#tbody>tr:eq(2)").append('<td>'+data.data.listGoodsVo[0].price.price+'</td><td><input type="text" id="price"></td>');
+                        $("#tbody>tr:eq(3)>td:first").after('<td><img width="150px" height="100px" src="/ui/static/js/bootstrap/img/goods'+data.data.listGoodsVo[0].gimag+'"></td>');
+                        $("#tbody>tr:eq(4)").append('<td>'+data.data.listGoodsVo[0].gtype+'</td><td><select id="type">' +
+                            '<option>主食</option><option>炖汤</option><option>小吃</option><option>饮料</option><option>甜品</option>' +
+                            '</select></td>');
+                        //判断状态
+                        if(data.data.listGoodsVo[0].gstate==0){
+                            $("#tbody>tr:eq(5)").append('<td><label style="display:none;">0</label>已上架</td>');
+                        }else{
+                            $("#tbody>tr:eq(5)").append('<td><label style="display:none;">1</label>下架中</td>');
+                        }
+                        $("#tbody>tr:eq(5)").append('<td><select id="state"><option value="0">上架</option><option value="1">下架</option></select></td>');
+                        $("#tbody>tr:eq(6)").append('<td>'+data.data.listGoodsVo[0].gaddtime+'</td><td></td>');
+                        $("#tbody>tr:eq(7)").append('<td>'+data.data.listGoodsVo[0].gdetails+'</td><td><textarea id="gdetails" cols="60" rows="10"></textarea></td>');
+                    }else{
+                        $("#tbody>tr:eq(0)").append('<td style="color:red">错误信息</td>');
+                        $("#tbody>tr:eq(1)").append('<td style="color:red">错误信息</td>');
+                        $("#tbody>tr:eq(2)").append('<td style="color:red">错误信息</td>');
+                        $("#tbody>tr:eq(3)").append('<td style="color:red">错误信息</td>');
+                        $("#tbody>tr:eq(4)").append('<td style="color:red">错误信息</td>');
+                        $("#tbody>tr:eq(5)").append('<td style="color:red">错误信息</td>');
+                        $("#tbody>tr:eq(6)").append('<td style="color:red">错误信息</td>');
+                        $("#tbody>tr:eq(7)").append('<td style="color:red">错误信息</td>');
+                    }
+                }
+            });
+
+            /**
+             * 修改信息
+             * */
+            $("#btn").click(function () {
+                //获得需要修改的菜品名称
+                let gname = $("#gname").val().trim();
+                //获得菜品价格
+                let price = $("#price").val().trim();
+                //获得菜品类型
+                let oldtype = $("#tbody>tr:eq(4)").children("td:eq(1)").text();
+                let newtype = $("#type").children("option:selected").text();
+                //获得菜品状态
+                let oldstate = $("#tbody>tr:eq(5)").children("td:eq(1)").children("label").text();
+                let newstate = $("#state").children("option:selected").val();
+                //获得菜品描述
+                let details = $("#gdetails").val().trim();
+                //判断是否上传了图片
+                upload();
+                let gimag = $("#iname").text().trim();
+                //判断是否填入东西
+                if(gname==""&&price==""&&details==""&&gimag==""&&oldtype==newtype&&oldstate==newstate||gname==null&&price==null&&details==null&&gimag==null){
+                    alert("请填写需要修改的信息")
+                }
+                //有填写信息
+                else{
+                    let type = newtype;
+                    let state = newstate;
+                    if(oldstate==newstate){
+                        state=null;
+                    }
+                    if(oldtype==newtype){
+                        type=null;
+                    }
+                    if(gname==""){
+                        gname=null;
+                    }
+                    if(details==""){
+                        details=null;
+                    }
+                    if(gimag==""){
+                        gimag=null;
+                    }
+                    if(isNaN(price)){
+                        price=null;
+                    }
+                    update(gname,price,type,state,details,gimag,gid);
+                }
+            });
+        });
+
+        /**
+         * 上传图片
+         **/
+        function upload() {
+            $("#upload").ajaxSubmit({
+                url:'/goods/goods/upload',
+                type: 'post',
+                async:false,
+                success:function (data) {
+                    //获得图片名字
+                    $("#iname").text(data.fileNameList[0]);
+                }
+            });
+            if($("#iname").text().trim()==null&&$("#iname").text().trim()==""){
+                alert("上传失败！");
+            }
+        }
+
+        /**
+         * 修改信息
+         * */
+        function update(gname,price,newtype,newstate,details,gimag,gid){
+            let goodsVo = {
+                "gid":gid,
+                "gname":gname,
+                "gtype":newtype,
+                "gimag":gimag,
+                "gstate":newstate,
+                "gdetails":details,
+                "price":{"price":price}
+            };
+            $.ajax({
+                url: "/goods/goods/update",
+                data: JSON.stringify(goodsVo),
+                type: "post",
+                contentType:"application/json;charset=UTF-8;",
+                dataType: "json",
+                success:function (data) {
+                    //判断是否修改成功
+                    if(data.state==4020){
+                        alert(data.msg);
+                        location.href='goodslist.html';
+                    }
+                    //修改失败
+                    else{
+                        alert(data.msg);
+                    }
+
+                }
+            });
+        }
+        /**
+         * 获取地址栏上的gid
+         * @param name
+         * @returns {string|null}
+         */
+        function getUrlParam(name)
+        {
+            let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            let r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r!=null) return unescape(r[2]); return null; //返回参数值
+        }
+    </script>
+
+</head>
+<SCRIPT language=JavaScript>
+function sousuo(){
+	window.open("gaojisousuo.htm","","depended=0,alwaysRaised=1,width=800,height=510,location=0,menubar=0,resizable=0,scrollbars=0,status=0,toolbar=0");
+}
+function selectAll(){
+	var obj = document.fom.elements;
+	for (var i=0;i<obj.length;i++){
+		if (obj[i].name == "delid"){
+			obj[i].checked = true;
+		}
+	}
+}
+
+function unselectAll(){
+	var obj = document.fom.elements;
+	for (var i=0;i<obj.length;i++){
+		if (obj[i].name == "delid"){
+			if (obj[i].checked==true) obj[i].checked = false;
+			else obj[i].checked = true;
+		}
+	}
+}
+
+function link(){
+    document.getElementById("fom").action="xuqiumingxi.html";
+   document.getElementById("fom").submit();
+}
+</SCRIPT>
+
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+  <tr>
+    <td height="30">      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td height="62" background="../static/js/bootstrap/img/goods/gimag/nav04.gif">
+            
+		   <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
+		    <tr>
+			  <td width="21">&nbsp;</td>
+			  </tr>
+          </table></td>
+        </tr>
+    </table></td></tr>
+  <tr>
+    <td><table id="subtree1" style="DISPLAY: " width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td><table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+         
+              <tr>
+                <TD height="40" class="font42">
+				<table width="100%" border="0" cellpadding="4" cellspacing="1" bgcolor="#464646" class="newfont03">
+                    <thead>
+                        <tr>
+                            <td height="20" colspan="3" bgcolor="#EEEEEE" class="tablestyle_title">
+                                <div align="center" style="font-size:16px">菜品明细列表</div>						</td>
+                        </tr>
+                        <tr>
+                            <td class="tablestyle_title" style="text-align: center"></td>
+                            <td class="tablestyle_title" style="text-align: center">修改前</td>
+                            <td class="tablestyle_title" style="text-align: center">修改后</td>
+                        </tr>
+                    </thead>
+
+					<tbody id="tbody">
+                        <tr bgcolor="#FFFFFF" height="20">
+                            <td width="16%" align="right">菜品编号:</td>
+                        </tr>
+                        <tr bgcolor="#FFFFFF">
+                            <td align="right">菜品名称:</td>
+                        </tr>
+                        <tr bgcolor="#FFFFFF">
+                            <td align="right" height="80">菜品价格:</td>
+                        </tr>
+                        <tr bgcolor="#FFFFFF">
+                            <td align="right">菜品图片:</td>
+                            <td><form id="upload" method="post"><input type="file" name="uploads"></form></td>
+                        </tr>
+                        <tr bgcolor="#FFFFFF">
+                            <td align="right">菜品类型:</td>
+                        </tr>
+                        <tr bgcolor="#FFFFFF">
+                            <td align="right">菜品状态:</td>
+                        </tr>
+                        <tr bgcolor="#FFFFFF">
+                            <td align="right">添加时间:</td>
+                        </tr>
+                        <tr  height="80" bgcolor="#FFFFFF">
+                            <td align="right">菜品描述:</td>
+                        </tr>
+                    </tbody>
+                        <td colspan="3" bgcolor="#FFFFFF" align="center"><input id="btn" type="button" value="确定">&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="location.href='goodslist.html'" value="返回"></td>
+
+                    <tfoot style="display:none">
+                        <tr>
+                            <td><span id="iname"></span></td>
+                        </tr>
+                    </tfoot>
+                </table>
+				</TD>
+              </tr>
+            </table></td>
+        </tr>
+      </table>
+      </td>
+  </tr>
+</table>
+</body>
+</html>

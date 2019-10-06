@@ -18,7 +18,6 @@
     <modules>
         <module>ssm_my_restaurant_admin</module>
         <module>ssm_my_restaurant_userview</module>
-        <module>exercise</module>
     </modules>
 
     <dependencies>
@@ -112,5 +111,13 @@
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
         </dependency>
+
+        <!--fastjsion 需要配置-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.59</version>
+        </dependency>
+
     </dependencies>
 </project>

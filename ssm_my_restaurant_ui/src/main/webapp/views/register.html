@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Register - Input Form by Tooplate</title>
+	
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400">
+    <link rel="stylesheet" href="../static/js/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/js/bootstrap/css/materialize.min.css">
+    <link rel="stylesheet" href="../static/js/bootstrap/css/tooplate.css">
+
+    <script src="../static/js/bootstrap/js/jquery/jquery-2.1.1.min.js" charset="UTF-8" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#btn").click(function () {
+                //获取4个表单中的值
+                let sex = $("input[name=title]:checked").val();
+                let username = $("#user_name").val().trim();
+                let password = $("#password").val().trim();
+                let apassword = $("#a_password").val().trim();
+                let phone = $("#phone").val().trim();
+                //判断是否为空
+                if(sex!=""&&username!=""&&password!=""&&apassword!=""&&phone!=""&&sex!=null&&username!=null&&password!=null&&apassword!=null&&phone!=null){
+                    //判断密码是否一致
+                    if(password==apassword){
+                        //插入数据
+                        var userDto = {
+                            "uname":username,
+                            "password":password,
+                            "sex":sex,
+                            "tel":phone
+                        };
+                        register(userDto);
+                    }
+                    //不一致
+                    else{
+                        alert("两次密码不一致,请重新输入");
+                    }
+                }
+                //其中一个有空
+                else{
+                    alert("请输入全部信息");
+                }
+            });
+        });
+
+        //插入用户
+        function register(userDto) {
+            $.ajax({
+                url: "/loginAndRegister/user/register",
+                data: JSON.stringify(userDto),
+                type: "post",
+                contentType:"application/json",
+                dataType: "json",
+                success:function (data) {
+                    //判断是否注册成功
+                    if (data.data>0) {
+                        alert(data.msg);
+                        location.href='index.html';
+                    }
+                    //注册不成功
+                    else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+
+<body id="register">
+    <div class="container">
+        <div class="row tm-register-row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 tm-register-col-l">
+                <form action="" method="post">
+                    <div class="mb-2">
+                        <label class="mr-4">
+                            <input class="with-gap" name="title" type="radio" value="男" />
+                            <span>男</span>
+                        </label>
+                        <label class="mr-4">
+                            <input class="with-gap" name="title" type="radio" value="女" />
+                            <span>女</span>
+                        </label>
+                    </div>
+
+                    <div class="input-field">
+                        <input placeholder="User Name" id="user_name" name="user_name" type="text" class="validate">
+                    </div>
+                    <div class="input-field">
+                        <input placeholder="Password" id="password" name="password" type="password" class="validate">
+                    </div>
+
+                    <div class="input-field">
+                        <input placeholder="Again Password" id="a_password" name="a_password" type="password" class="validate">
+                    </div>
+                    <div class="input-field">
+                        <input placeholder="Phone" id="phone" name="phone" type="text" class="validate">
+                    </div>
+<!--                    <div class="input-field">-->
+<!--                        <input placeholder="Email" id="email" name="email" type="text" class="validate">-->
+<!--                    </div>-->
+                    <div class="text-right mt-4">
+                        <button type="button" id="btn" class="waves-effect btn-large btn-large-white px-4 black-text">注册</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 tm-register-col-r">
+                <header class="mb-5">
+                    <h3 class="mt-0 text-white" style="color:white;">REGISTER Yourself</h3>
+                    <p class="grey-text">Aenean tincidunt, enim nec blandit lobortis, ante enim ultrices eros, et laoreet augue libero id nunc.
+                        Proin semper feugiat ultrices.</p>
+                    <p class="grey-text">Aenean a efficitur magna, sed dignissim odio. Praesent pretium lectus ac nunc ultrices, ac volutpat orci
+                        viverra.
+                    </p>
+                </header>
+
+            </div>
+        </div>
+        <footer class="row tm-mt-big mb-3">
+            <div class="col-xl-12">
+                <p class="text-center grey-text text-lighten-2 tm-footer-text-small">
+                    Copyright &copy; 2018 Company Name 
+                    
+                    - aco</p>
+            </div>
+        </footer>
+    </div>
+
+<!--    <script src="../static/js/bootstrap/js/jquery/jquery-3.2.1.slim.min.js"></script>-->
+<!--    <script src="../static/js/bootstrap/js/materialize.min.js"></script>-->
+<!--    <script>-->
+<!--        $(document).ready(function () {-->
+<!--            $('select').formSelect();-->
+<!--        });-->
+<!--    </script>-->
+</body>
+
+</html>

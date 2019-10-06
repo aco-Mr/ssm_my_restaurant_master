@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>项目管理系统 by www.mycodes.net</title>
+<link rel="stylesheet" rev="stylesheet" href="../static/js/bootstrap/css/style.css" type="text/css" media="all" />
+<script src="../static/js/bootstrap/js/jquery/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+<script src="../static/js/bootstrap/js/jquery.validate/jquery.form.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!--<script language="JavaScript" type="text/javascript">-->
+<!--function tishi()-->
+<!--{-->
+<!--  var a=confirm('数据库中保存有该人员基本信息，您可以修改或保留该信息。');-->
+<!--  if(a!=true)return false;-->
+<!--  window.open("冲突页.htm","","depended=0,alwaysRaised=1,width=800,height=400,location=0,menubar=0,resizable=0,scrollbars=0,status=0,toolbar=0");-->
+<!--}-->
+
+<!--function check()-->
+<!--{-->
+<!--document.getElementById("aa").style.display="";-->
+<!--}-->
+
+<!--</script>-->
+<style type="text/css">
+<!--
+.atten {font-size:12px;font-weight:normal;color:#F00;}
+-->
+	#title{
+		text-align: center;
+	}
+</style>
+
+	<script type="text/javascript">
+		$(function () {
+
+			//保存图片
+			$("#save").click(function () {
+				//获得菜品信息
+				let gname = $("#gname").val().trim();
+				let gtype = $("#type").children("option:selected").text();
+				let gprice = $("#gprice").val().trim();
+				let details = $("#details").val().trim();
+				//*号项不能为空
+				if(gname!=null&&gtype!=null&&gprice!=null&&gname!=""&&gtype!=""&&gprice!=""){
+					//判断价格是否为数值
+					if(isNaN(Number(gprice))){
+						alert("请输入正确的价格！");
+					}else {
+						//判断图片是否为空
+						upload();
+						let gimag = $("#iname").text().trim();
+						if(gimag!=null&&gimag!=""){
+							//传进后台
+							let goodslist = {
+								"gname":gname,
+								"gtype":gtype,
+								"gimag":"/upload/"+gimag,
+								"gdetails":details,
+								"price":{"price":gprice}
+							};
+							goodsAdd(goodslist);
+						}
+						//图片为空
+						else{
+							alert("上传图片不能为空");
+						}
+					}
+				}
+				//为空
+				else{
+					alert('*号项不能为空！');
+				}
+			});
+
+		});
+
+		//上传图片
+		function upload() {
+			$("#upload").ajaxSubmit({
+				url:'/goods/goods/upload',
+				type: 'post',
+				async:false,
+				success:function (data) {
+					//获得图片名字
+					$("#iname").text(data.fileNameList[0]);
+				}
+			});
+			if($("#iname").text().trim()==null&&$("#iname").text().trim()==""){
+				alert("上传失败！");
+			}
+		}
+
+		//插入菜品
+		function goodsAdd(userVo) {
+			$.ajax({
+				url: "/goods/goods/add",
+				data: JSON.stringify(userVo),
+				type: "post",
+				contentType:"application/json",
+				dataType: "json",
+				success:function (data) {
+					//判断是否添加成功
+					if(data.state==2010){
+						alert(data.msg);
+						location.href='goodslist.html';
+					}
+					//添加失败
+					else{
+						alert(data.msg);
+						location.reload();
+					}
+
+				}
+			});
+		}
+	</script>
+
+</head>
+
+<body class="ContentBody">
+<!--  <form method="post" enctype="multipart/form-data" name="form" target="sypost" >-->
+<div class="MainDiv">
+<table width="99%" border="0" cellpadding="0" cellspacing="0" class="CContent">
+  <tr>
+      <th class="tablestyle_title" id="title">添加菜单功能</th>
+  </tr>
+  <tr>
+    <td class="CPanel">
+		
+		<table border="0" cellpadding="0" cellspacing="0" style="width:100%">
+
+		<TR>
+			<TD width="100%">
+				<fieldset style="height:100%;">
+				<legend>添加菜单</legend>
+					  <table border="0" cellpadding="2" cellspacing="1" style="width:100%">
+					  <tr>
+					    <td nowrap align="right" width="11%"><span style="color: red">* &nbsp;</span>菜品名称:</td>
+					    <td width="27%"><input id="gname" name='txt3' type="text" class="text" style="width:154px"/></td>
+					  </tr>
+
+					  <tr>
+						<tr>
+					  <td width="11%" align="right" nowrap><span style="color: red">* &nbsp;</span>菜品类型:</td>
+					    <td><select id="type" name="select1">
+							<option>主食</option>
+							<option>炖汤</option>
+							<option>小吃</option>
+							<option>饮料</option>
+							<option>甜品</option>
+						</select></td>
+					  </tr>
+						<tr>
+							<td nowrap align="right" width="11%"><span style="color: red">* &nbsp;</span>菜品图片:</td>
+							<td width="27%">
+								<form id="upload" method="post"><input name='uploads' type="file"/>
+								</form></td>
+						</tr>
+
+						<tr>
+							  <td nowrap align="right" width="11%"><span style="color: red">* &nbsp;</span>菜品价格:</td>
+							  <td width="27%"><input id="gprice" name='txt3' type="text" class="text" style="width:154px"/></td>
+						</tr>
+
+					  <tr>
+					    <td  width="11%" nowrap align="right">详细内容:</td>
+					    <td colspan="3"><textarea id="details" name="textarea" cols="60" rows="10"></textarea></td>
+					    </tr>
+
+						  <tfoot style="display:none">
+						  	<tr>
+								<td><span id="iname"></span></td>
+							</tr>
+						  </tfoot>
+					  </table>
+			  <br/>
+				</fieldset></TD>
+			
+		</TR>
+		
+		</TABLE>
+	
+	
+	 </td>
+  </tr>
+		<TR>
+			<TD colspan="2" align="center" height="50px">
+			<input type="button" name="Submit" value="保存" id="save" class="right-button02"/>　
+			
+			<input type="button" name="Submit2" value="返回" class="right-button02" onclick="location.href='goodslist.html'"/></TD>
+		</TR>
+		</TABLE>
+	
+	
+	 </td>
+  </tr>
+  
+  
+  
+  </table>
+
+</div>
+<!--</form>-->
+</body>
+</html>

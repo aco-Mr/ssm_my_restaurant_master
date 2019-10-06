@@ -10,7 +10,7 @@
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
     <!-- 配置扫描@Controller注解 -->
-    <context:component-scan base-package="com.my.restaurant.account.web.controller" />
+    <context:component-scan base-package="com.aco.my.restaurant.account.web.controller" />
 
     <!-- 配置springmvc的注解扫描 -->
     <!--

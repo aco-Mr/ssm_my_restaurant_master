@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aco.my.restaurant.loginAndRegister.dao.UserDao">
+    <insert id="insertUser">
+        insert into a_user(uname, password, sex, tel, login_time, register_time)
+        values (#{userDto.uname},#{userDto.password},#{userDto.sex},#{userDto.tel},#{userDto.loginTime},#{userDto.registerTime})
+    </insert>
+
+    <select id="findByName" resultType="com.aco.my.restaurant.loginAndRegister.dto.UserDto">
+        select uid, uname, password, sex, tel, ustate, login_time, register_time
+        from a_user
+        where uname=#{username}
+    </select>
+    <update id="createLoginTime">
+        update a_user
+        set login_time=#{date}
+        where uid=#{uid}
+    </update>
+
+</mapper>

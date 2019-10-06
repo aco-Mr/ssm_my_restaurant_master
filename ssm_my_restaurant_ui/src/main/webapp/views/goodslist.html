@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>项目管理系统 by www.mycodes.net</title>
+<style type="text/css">
+<!--
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+.tabfont01 {	
+	font-family: "宋体";
+	font-size: 9px;
+	color: #555555;
+	text-decoration: none;
+	text-align: center;
+}
+.font051 {font-family: "宋体";
+	font-size: 12px;
+	color: #333333;
+	text-decoration: none;
+	line-height: 20px;
+}
+.font201 {font-family: "宋体";
+	font-size: 12px;
+	color: #FF0000;
+	text-decoration: none;
+}
+.button {
+	font-family: "宋体";
+	font-size: 14px;
+	height: 37px;
+}
+#table{
+    text-align: center;
+}
+#title{
+    text-align: center;
+}
+html { overflow-x: auto; overflow-y: auto; border:0;} 
+-->
+</style>
+
+<link href="../static/js/bootstrap/css/css.css" rel="stylesheet" type="text/css" />
+<link href="../static/js/bootstrap/css/style.css" rel="stylesheet" type="text/css" />
+<script src="../static/js/bootstrap/js/jquery/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+  $(function () {
+      //页面初始化
+      findAll(1);
+      //当前页码显示条数
+      $("#sel").change(function () {
+          let pageNums = $("#lblPageNum").text();
+          $(this).children("option:selected").attr("selected","selected");
+          findAll(pageNums);
+      });
+
+      //查询菜品名称或类型
+      $("#findGname").click(function () {
+          //获取查询条件
+          let condition = $("#findGoods").val().trim();
+          if(condition!=null&&condition!=""){
+              findCondition(1,condition);
+          }
+          //条件为空
+          else{
+              alert("请输入查询条件");
+          }
+      });
+
+      //删除菜品
+      //获取菜品Id
+      $(document).on("click","#del",function () {
+          if(confirm("你确定要删除所选菜品吗？")){
+              //删除
+              //获得当前行id
+              let gid = $(this).parents("tr").children("td:eq(1)").text();
+              delGoods(1,gid);
+          }
+      });
+      $("#delSel").click(function () {
+          if(confirm("你确定要删除所选菜品吗？")){
+              //删除
+              delGoods(0);
+          }
+      });
+
+  });
+
+  //删除菜品
+  function delGoods(count,gid) {
+      let check_name=[];
+      //判断是单删还是多选删
+      if(count==0){
+          $("input:checkbox[name=delid]:checked").each(function (i, ele) {
+              check_name.push($(this).parent("td").next("td").text());
+          });
+      }
+      //单删
+      else{
+          check_name.push(gid);
+      }
+      //判断gidlist是否为空
+      if(check_name.length>0){
+          $.ajax({
+              url:"/goods/goods/del",
+              data:{"listGid":check_name.join()},
+              type:"post",
+              dataType:"json",
+              success:function (data) {
+                  //删除成功
+                  if(data.state==3010){
+                      alert(data.msg);
+                      location.reload();
+                  }
+                  //删除失败
+                  else{
+                      alert(data.msg);
+                  }
+              }
+          });
+      }
+      //为空
+      else{
+          alert("请选择需要删除的菜品");
+      }
+
+  }
+
+  //按条件获取菜品信息
+  function findCondition(pageNums,condition) {
+      let pageSize = $("#sel>option:selected").val();
+      //配置信息
+      $.ajax({
+          url:"/goods/goods/findGoods",
+          data:{"pageNum":pageNums,"pageSize":pageSize,"condition":condition},
+          type:"get",
+          dataType:"json",
+          success:function (data) {
+              //判断是否有信息
+              let tbody =[];
+              if(data.state==2030){
+                  //循环tbody数据
+                  $.each(data.data.listGoodsVo,function (i, ele) {
+                      tbody.push('<tr>\n' +
+                          '<td bgcolor="#FFFFFF"><input type="checkbox" name="delid"/></td>\n'+
+                          '<td bgcolor="#FFFFFF">'+ele.gid+'</td>\n' +
+                          '<td bgcolor="#FFFFFF">'+ele.gname+'</td>\n' +
+                          '<td bgcolor="#FFFFFF"><img src="/ui/static/js/bootstrap/img/goods'+ele.gimag+'" style="width: 100px;height: 70px"></td>\n' +
+                          '<td bgcolor="#FFFFFF">'+ele.gtype+'</td>\n' +
+                          '<td bgcolor="#FFFFFF">'+ele.price.price+'</td>\n');
+                      if(ele.gstate==0){
+                          tbody.push(
+                              '<td bgcolor="#FFFFFF">已上架</td>\n');
+                      }else{
+                          tbody.push(
+                              '<td bgcolor="#FFFFFF">已下架</td>\n');
+                      }
+                      tbody.push('<td bgcolor="#FFFFFF"><a href="goodsdetails.html?gid='+ele.gid+'">详情</a>|<a id="del" href="#">删除</a>|<a id="update" href="goodsupdate.html?gid='+ele.gid+'">修改</a></td>\n</tr>');
+                      //添加
+                      $("#tbody").html(tbody.join());
+                  });
+                  //循环页码数据
+                  let page = [];
+                  $.each(data.data.pageInfo.navigatepageNums,function (i, ele) {
+                      page.push('<a href="javascript:findAll('+ele+',2)" class="right-font08">'+ele+'</a>');
+                  });
+                  $("#pages").html(page.join());
+                  $("#startNum").html(data.data.firstPage);
+                  $("#lblPages").text(data.data.pageInfo.pages);
+                  $("#lblPageNum").text(data.data.pageInfo.pageNum);
+              }else{
+                  alert("信息不存在");
+                  location.reload();
+              }
+          }
+      });
+  }
+
+  //获取全部菜品信息
+  function findAll(pageNums) {
+    let pageSize = $("#sel>option:selected").val();
+    //配置信息
+    $.ajax({
+      url:"/goods/goods/all",
+      data:{"pageNum":pageNums,"pageSize":pageSize},
+      type:"get",
+      dataType:"json",
+      success:function (data) {
+        //判断是否有信息
+        let tbody =[];
+        if(data.state==2030){
+          //循环tbody数据
+          $.each(data.data.listGoodsVo,function (i, ele) {
+            tbody.push('<tr>\n' +
+                    '<td bgcolor="#FFFFFF"><input type="checkbox" name="delid"/></td>\n'+
+                    '<td bgcolor="#FFFFFF">'+ele.gid+'</td>\n' +
+                    '<td bgcolor="#FFFFFF">'+ele.gname+'</td>\n' +
+                    '<td bgcolor="#FFFFFF"><img src="/ui/static/js/bootstrap/img/goods'+ele.gimag+'" style="width: 100px;height: 70px"></td>\n' +
+                    '<td bgcolor="#FFFFFF">'+ele.gtype+'</td>\n' +
+                    '<td bgcolor="#FFFFFF">'+ele.price.price+'</td>\n');
+            if(ele.gstate==0){
+                tbody.push(
+                    '<td bgcolor="#FFFFFF">已上架</td>\n');
+            }else{
+                tbody.push(
+                    '<td bgcolor="#FFFFFF">已下架</td>\n');
+            }
+            let href = "http://localhost:8080/ui/views/goodsdetails.html?gid="+ele.gid;
+            tbody.push('<td bgcolor="#FFFFFF"><a href="goodsdetails.html?gid='+ele.gid+'">详情</a>|<a id="del" href="#">删除</a>|<a id="update" href="goodsupdate.html?gid='+ele.gid+'">修改</a></td>\n</tr>');
+          });
+          //循环页码数据
+          let page = [];
+          $.each(data.data.pageInfo.navigatepageNums,function (i, ele) {
+            page.push('<a href="javascript:findAll('+ele+',2)" class="right-font08">'+ele+'</a>');
+          });
+          $("#pages").html(page.join());
+          $("#startNum").html(data.data.firstPage);
+          $("#lblPages").text(data.data.pageInfo.pages);
+          $("#lblPageNum").text(data.data.pageInfo.pageNum);
+        }else{
+          tbody.push('<tr>\n' +
+                  '<td bgcolor="#FFFFFF">数据库没有此信息</td>\n' +
+                  '<td bgcolor="#FFFFFF">数据库没有此信息</td>\n' +
+                  '<td bgcolor="#FFFFFF">数据库没有此信息</td>\n' +
+                  '<td bgcolor="#FFFFFF">数据库没有此信息</td>\n' +
+                  '<td bgcolor="#FFFFFF">数据库没有此信息</td>\n' +
+                  '<td bgcolor="#FFFFFF">数据库没有此信息</td>\n' +
+                  '<td bgcolor="#FFFFFF">数据库没有此信息</td>\n' +
+                  '</tr>');
+        }
+          //添加
+          $("#tbody").html(tbody.join());
+      }
+    });
+  }
+
+  //跳转页码
+  function onJump(nums) {
+    let pageNums = $("#lblPageNum").text();
+    let pages = $("#lblPages").text();
+    let firstPage = $("#startNum").val();
+    let condition = $("#findGoods").val().trim();
+    if (nums==0) {//首页
+        if(condition!=null&&condition!=""){
+            findCondition(1,condition);
+        }else{
+            findAll(1);
+        }
+    }else if(nums==1){//上一页
+      if (pageNums>1) {
+          if(condition!=null&&condition!=""){
+              findCondition(parseInt(pageNums)-1,condition);
+          }else{
+              findAll(parseInt(pageNums)-1);
+          }
+      }
+    }else if(nums==2){//下一页
+      if(pageNums<pages){
+          if(condition!=null&&condition!=""){
+              findCondition(parseInt(pageNums)+1,condition);
+          }else{
+              findAll(parseInt(pageNums)+1);
+          }
+
+      }
+    }else if(nums==3){//尾页
+        if(condition!=null&&condition!=""){
+            findCondition(pages,condition);
+        }else{
+            findAll(pages,2);
+        }
+    }else{//跳转页
+        let goText = $("#goText").val().trim();
+        if(goText<=pages&&goText>=firstPage){
+            if(condition!=null&&condition!=""){
+                findCondition(goText,condition);
+            }else{
+                findAll(goText);
+            }
+        }else{
+            alert("请输入正确的页码")
+        }
+    }
+  }
+</script>
+</head>
+<SCRIPT language=JavaScript>
+function sousuo(){
+	window.open("gaojisousuo.htm","","depended=0,alwaysRaised=1,width=800,height=510,location=0,menubar=0,resizable=0,scrollbars=0,status=0,toolbar=0");
+}
+function selectAll(){
+	var obj = document.fom.elements;
+	for (var i=0;i<obj.length;i++){
+		if (obj[i].name == "delid"){
+			obj[i].checked = true;
+		}
+	}
+}
+
+function unselectAll(){
+	var obj = document.fom.elements;
+	for (var i=0;i<obj.length;i++){
+		if (obj[i].name == "delid"){
+			if (obj[i].checked==true) obj[i].checked = false;
+			else obj[i].checked = true;
+		}
+	}
+}
+
+function link(){
+    document.getElementById("fom").action="xiangmugongnen.htm";
+   document.getElementById("fom").submit();
+}
+</SCRIPT>
+
+<body>
+<form name="fom" id="fom" method="post">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+  <tr>
+    <td height="30">      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+<!--          <td height="62" background="../static/js/bootstrap/img/goods/nav04.gif">-->
+            
+		   <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
+		    <tr>
+			  <td width="21"><img src="../static/js/bootstrap/img/goods/ico07.gif" width="20" height="18" /></td>
+			  <td width="332"><p>查看内容：			    <span style="color: red">请输入菜品名字或菜品类型：</span>
+                  <input name="textfield" id="findGoods" type="text" size="12"/>
+                  <input name="Submit" id="findGname" type="button" class="right-button02" value="查 询" />
+			      </p>
+			    </td>
+                <td width="350" align="left"><a href="#" onclick=""></a></td>
+<!--			     <input name="Submit" type="button" class="right-button07" value="高级搜索" />-->
+<!--			   </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+		    </tr>
+          </table></td>
+        </tr>
+    </table></td></tr>
+  <tr>
+    <td><table id="subtree1" style="DISPLAY: " width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td><br/><table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+          	 <tr>
+               <td height="20"><span class="newfont07">选择：<a href="#" class="right-font08" onclick="selectAll();">全选</a>-<a href="#" class="right-font08" onclick="unselectAll();">反选</a></span>
+	              <input name="Submit" id="delSel" type="button" class="right-button08" value="删除所选菜品" />
+	              <input name="Submit2" type="button" class="right-button08" value="添加菜品" onclick="location.href='goodsadd.html'" />
+	              </td>
+          </tr>
+              <tr>
+                <td height="40" class="font42">
+                    <br/>
+                  <table width="100%" id="table" border="0" cellpadding="4" cellspacing="1" bgcolor="#464646" class="newfont03">
+                  <thead>
+                  <tr>
+                      <td height="20" colspan="9" id="title" bgcolor="#EEEEEE" class="tablestyle_title">支出列表</td>
+                  </tr>
+                  <tr>
+                    <td width="5%" height="20" align="center" bgcolor="#EEEEEE">选择</td>
+                    <td width="5%" height="20" align="center" bgcolor="#EEEEEE">菜品编号</td>
+                    <td width="5%" align="center" bgcolor="#EEEEEE">菜品名字</td>
+                    <td width="5%" align="center" bgcolor="#EEEEEE">菜品图片</td>
+                    <td width="5%" align="center" bgcolor="#EEEEEE">菜品类型</td>
+                    <td width="5%" align="center" bgcolor="#EEEEEE">菜品价格</td>
+                    <td width="5%" align="center" bgcolor="#EEEEEE">状态</td>
+                    <td width="7%" align="center" bgcolor="#EEEEEE">操作</td>
+                  </tr>
+                  </thead>
+
+                  <tbody id="tbody">
+                  </tbody>
+                  <tfoot style="display: none">
+                    <tr><td><label id="startNum"></label></td></tr>
+                  </tfoot>
+                </table></td>
+              </tr>
+            </table></td>
+        </tr>
+      </table>
+      <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+          <td height="6"><img src="../static/js/bootstrap/img/goods/spacer.gif" width="1" height="1" /></td>
+        </tr>
+        <tr>
+          <td height="33"><table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="right-font08">
+              <tr>
+                <td width="50%">共 <span class="right-text09"><label id="lblPages"></label></span> 页 | 第 <span class="right-text09"><label id="lblPageNum"></label></span> 页
+                 &nbsp;| 每页显示
+                <select id="sel">
+                    <option value="2">2</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                </select> 条
+                </td>
+                <td width="49%" align="right">[<a href="javascript:onJump(0)" class="right-font08">首页</a> | <a href="javascript:onJump(1)" class="right-font08">上一页</a> <label id="pages"></label><a href="javascript:onJump(2)" class="right-font08"> 下一页</a> | <a href="javascript:onJump(3)" class="right-font08">末页</a>] 转至：</td>
+                <td width="1%"><table width="20" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="1%"><input name="textfield3" id="goText" type="text" class="right-textfield03" size="1" /></td>
+                      <td width="87%"><input name="Submit23222" type="button" onclick="onJump(4)" class="right-button06" value=" " />
+                      </td>
+                    </tr>
+                </table></td>
+              </tr>
+          </table></td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+</form>
+</body>
+</html>

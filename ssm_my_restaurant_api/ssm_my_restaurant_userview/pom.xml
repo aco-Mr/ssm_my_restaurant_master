@@ -16,6 +16,7 @@
     <modules>
         <module>ssm_my_restaurant_classify</module>
         <module>ssm_my_restaurant_account</module>
+        <module>ssm_my_restaurant_loginAndRegister</module>
     </modules>
 
 </project>
