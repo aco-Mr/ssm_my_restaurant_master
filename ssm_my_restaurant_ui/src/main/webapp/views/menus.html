@@ -25,16 +25,17 @@
                 if (i == qs.length - 1)
                     json += "}"
             }//string转化为json
-            alert(json);
         }
-
+        var roomName=new String();
         function name() {//必须在<body>标签中加οnlοad="name()"属性，页面加载完再执行该js
             var jsonobj = eval("(" + json + ")");//string转换 json对象
             var deskInfo = jsonobj.deskInfo;//获取值
             var dids = jsonobj.dids;
+            roomName =jsonobj.roomName;
             $(function () {
-                alert(deskInfo);
-                $("#head").html(deskInfo);
+                $("#head").html("<span style='color: #2b669a'>"+deskInfo+
+                    "</span><span id='dids' style='display: none'>"+dids+"</span>" +
+                    "<span id= 'roomName' style='display: none'>"+roomName+"</span>");
             });
         }
 
@@ -48,7 +49,7 @@
                     if (data.data) {
                         var html = [];
                         $.each(data.data, function (i, ele) {
-                            var str = " <li class='gtype'><span>" + ele.gtype + "</span></li>";
+                            var str = " <Strong class='gtype'><span>" + ele.gtype + "</span>&nbsp;&nbsp;&nbsp;&nbsp;</Strong>";
                             html.push(str);
                         });
                         $("#goodsType").html(html);
@@ -57,21 +58,251 @@
             });
         });
 
-        function goodsByType(){
-
+        //根据食物类型查找食物
+        function goodsByType(gtype) {
+            $.ajax({
+                url: 'http://localhost:8080/order//menus/goodsByType',
+                data: {gtype: gtype},
+                type: 'post',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.data) {
+                        var html = [];
+                        html.push("<tr><th>菜名</th><th>价格</th><th>操作</th></tr>");
+                        $.each(data.data, function (i, ele) {
+                            var price = 0.0;
+                            if (ele.prices) {
+                                $.each(ele.prices, function (i, ele) {
+                                    price = ele.price;
+                                });
+                            }
+                            var str = "<tr class='goods'><td>" + ele.gname + "</td><td>￥<span>" + price + "" +
+                                "</span><span class='gid'style='display:none;'>" + ele.gid + "</span></td> " +
+                                "<td><input type=\"button\" name=\"btnjia\" value='添加' class=\"jia \" ></td>" +
+                                "</tr>";
+                            html.push(str);
+                        });
+                        $("#goods").html(html);
+                    }
+                }
+            });
         }
 
+        //根据名称查找食物
+        function goodsByName(gName) {
+            $.ajax({
+                url: 'http://localhost:8080/order//menus/findGoodsByName',
+                data: {gName: gName},
+                type: 'post',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.data) {
+                        if (data.data == null || data.data == '') {
+                            alert("没有相关商品");
+                        } else {
+                            var html = [];
+                            html.push("<tr><th>菜名</th><th>价格</th><th>操作</th></tr>");
+                            $.each(data.data, function (i, ele) {
+                                var price = 0.0;
+                                if (ele.prices) {
+                                    $.each(ele.prices, function (i, ele) {
+                                        price = ele.price;
+                                    });
+                                }
+                                var str = "<tr class='goods'><td>" + ele.gname + "</td><td>￥<span>" + price + "" +
+                                    "</span><span class='gid'style='display:none;'>" + ele.gid + "</span></td> " +
+                                    "<td><input type=\"button\" name=\"btnjia\" value='添加' class=\"jia \" ></td>" +
+                                    "</tr>";
+                                html.push(str);
+                            });
+                            $("#goods").html(html);
+                        }
+                    }
+                }
+            });
+        }
+
+        $(function () {
+            //点击根据名称查找食物
+            $(document).on("click", ".findName", function () {
+                var gName = $(".gName").val();
+                if (gName == null || gName == ''){
+                    alert("请输入菜名");
+                }else {
+                    goodsByName(gName);
+                }
+            });
+
+            //点击根据食物类型查找食物事件
+            $(document).on("click", ".gtype", function () {
+                var gtype = $(this).children("span").text();
+                goodsByType(gtype)
+            });
+
+
+            //添加食物
+            var sum = 0.0;//总价格
+            var num = 0;//菜品总数
+            $(document).on("click", ".jia", function () {
+                num++;
+                var goodsName = $(this).parents("tr").children("td:eq(0)").text();
+                var price = parseFloat($(this).parents("tr").children("td:eq(1)").children("span:eq(0)").text());
+                var gid = $(this).parents("tr").children("td:eq(1)").children("span:eq(1)").text();
+                sum = sum + price;
+                $(".x_3").html("￥" + sum);
+                $(".x_4").html("(" + num + ")份");
+                $(".od_menu").append(" <li class='odd'><span class='goodsname'>" + goodsName + "</span>&nbsp;&nbsp;&nbsp;" +
+                    "<STRONG>￥<span class='price'>" + price + "</span>&nbsp;&nbsp;</STRONG>" +
+                    "<span class='x_gid'style='display: none'>" + gid + "</span>" +
+                    "<input type=\"button\" class=\"orjian\" value=\"-\">&nbsp;" +
+                    "<input type=\"text\" name='num' value=\"1\" style=\"width:15px\" disabled='disabled'>&nbsp;" +
+                    "<input type=\"button\" class=\"orjia\" value=\"+\"></li>")
+            });
+
+            //减少食物
+            $(document).on("click", ".orjian", function () {
+                if ($(this).parents("li").children("input[name=num]").val() == 1) {
+                    var price = parseFloat($(this).parents("li").children("strong").children("span").text());
+                    $(this).parents("li").remove();
+                    sum = sum - price;
+                    num--;
+                    $(".x_3").html("￥" + sum);
+                    $(".x_4").html("(" + num + ")份");
+                } else {
+                    var count = parseInt($(this).parents("li").children("input[name=num]").val());
+                    var sumPrice = parseFloat($(this).parents("li").children("strong").children("span").text());
+                    var price = sumPrice / count;
+                    sum -= price;
+                    num--;
+                    $(".x_3").html("￥" + sum);
+                    $(".x_4").html("(" + num + ")份");
+                    count--;
+                    sumPrice -= price;
+                    $(this).parents("li").children("input[name=num]").val(count);
+                    $(this).parents("li").children("strong").children("span").text(sumPrice);
+                }
+            });
+
+            //增加食物
+            $(document).on("click", ".orjia", function () {
+                var count = parseInt($(this).parents("li").children("input[name=num]").val());
+                var price = parseFloat($(this).parents("li").children("strong").children("span").text());
+                var onePrice=price/count;
+                sum += onePrice;
+                num++;
+                $(".x_3").html("￥" + sum);
+                $(".x_4").html("(" + num + ")份");
+                count++;
+                $(this).parents("li").children("input[name=num]").val(count);
+                price += onePrice;
+                $(this).parents("li").children("strong").children("span").text(price);
+            });
+
+            //结算 生成订单
+            $(document).on("click", ".x_5", function () {
+                var clientNums = $(".clientNums").val();
+                if (num==0){
+                    alert("请选择食物");
+                }else if (clientNums==null||clientNums==''){
+                    alert("请输入就餐人数");
+                }
+                else  {
+                    var oid;
+                    var dids = $("#dids").text();//桌子编号
+                    var order={
+                        did:dids,
+                        userId:1,
+                        clientNums:clientNums,
+                        discount:0.95,
+                        teaFee:5,
+                        totalPrice:sum+clientNums*5
+                    };
+                    $.ajax({
+                        url: 'http://localhost:8080/order//order/saveOrder',
+                        data:JSON.stringify(order),
+                        contentType:"application/json",
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.data) {
+                                oid=data.data;
+                                alert(oid);
+                                saveOrderAndGoods(oid);
+                            }
+                        }
+                    });
+                }
+            });
+
+            $(".x_6").click(function () {
+                window.history.back();
+            });
+        });
+        //插入食物和订单的中间表
+        function saveOrderAndGoods(oid){
+            var gids=[];
+             $(".x_gid").each(function () {
+                 gids.push($(this).text());
+             });//所选食物编号
+            var gsum=[];
+            $("input[name=num]").each(function(){
+                gsum.push($(this).val());//所选每样商品数量
+            });
+            var orderAndGoodsList= [];
+            for (var i = 0; i <gids.length; i++) {
+                orderAndGoodsList[i]=new Object();
+                orderAndGoodsList[i].oid=oid;
+                orderAndGoodsList[i].gid=gids[i];
+                orderAndGoodsList[i].gnums=gsum[i];
+            }
+            $.ajax({
+                url: 'http://localhost:8080/order//orderAndGoods/saveInfo',
+                data:JSON.stringify(orderAndGoodsList),
+                contentType:"application/json",
+                type: 'post',
+                dataType: 'json',
+                success: function (data) {
+                    var searchUrl = encodeURI("http://localhost:8080/ui/views/order.html?&oid="
+                        + oid+"&roomName="+roomName);
+                    window.location.href = searchUrl;
+                 }
+            });
+        }
 
     </script>
+    <style type="text/css">
+    </style>
 </head>
 <body onload="name()">
 <div>
     <div id="head"></div>
+    <div>请输入就餐人数：<input type="number" name="clientNums" class="clientNums"min="1" value="" style="width: 40px"/><br/>
+         搜索菜名：<input type="text" name="gName" class="gName"min="1" value="" style="width: 40px"/>
+                  <input type="button" class="findName" value="查找">
+    </div>
     <div>
-        <ul id="goodsType" style="list-style-type:none">
+        <p id="goodsType" style="list-style-type:none">
+
+        </p>
+    </div>
+
+    <div>
+        <table id="goods" style="list-style-type:none"></table>
+    </div>
+
+    <div class="x_menu">
+        <ul class="od_menu" STYLE="list-style-type: none">
 
         </ul>
     </div>
+    <div class="x_top" style="margin-left: 30px">
+        <span class="x_3">￥0</span>&nbsp;&nbsp;&nbsp;
+        <!--            <li class="x_2" >(0)</li>-->
+        <span class="x_4">(0)份</span>&nbsp;&nbsp;
+        <span class="x_5">立即结算</span>&nbsp;&nbsp;
+        <span class="x_6">返回</span>
+    </div>
+
 </div>
 </body>
 </html>

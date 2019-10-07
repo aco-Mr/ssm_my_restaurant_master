@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订单首页</title>
+    <script src="../static/js/jquery/jquery-1.8.3.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var searchUrl = window.location.href;
+        var qs = searchUrl.split("&");
+        var json = "{";
+        if (qs) {
+            for (var i = 1; i < qs.length; i++) {
+                //得到键
+                var j = qs[i].indexOf("=");
+                var fin = qs[i].substring(0, j);//截取键
+                json += "\"" + fin + "\":";
+                //得到值
+                var searchData = qs[i].split("=");
+                var searchText = decodeURI(searchData[1]); //decodeURI解码
+                json += "\"" + searchText + "\"";
+                if (i < qs.length - 1)
+                    json += ",";
+                if (i == qs.length - 1)
+                    json += "}"
+            }//string转化为json
+        }
+        var roomName=new String();
+        function name() {//必须在<body>标签中加οnlοad="name()"属性，页面加载完再执行该js
+            var jsonobj = eval("(" + json + ")");//string转换 json对象
+            var oid = jsonobj.oid;//获取值
+            roomName=jsonobj.roomName;
+            $(function () {
+                $("#head").html("<span id='oid' style='display: none'>"+oid+"</span>");
+                $.ajax({
+                    url: 'http://localhost:8080/order//order/findOrderById',
+                    data: {oid:oid},
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        var totalPrice = 0.0;
+                        if (data.data) {
+                            var html = [];
+                            html.push("<li>订单编号：<span class='oid'>" + data.data.oid + "</span> </li>");
+                            html.push("<li>用户编号：" + data.data.userId + "</li>");
+                            html.push("<li>大厅/包厢：" + roomName + "</li>");
+                            html.push("<li >餐桌编号：<span class='dids'>" + data.data.did + "</span>号桌</li>");
+                            html.push("<li>就餐人数：" + data.data.clientNums + "人</li>");
+                            html.push("<li>茶位费：￥" + data.data.teaFee + "&nbsp;&nbsp;X" + data.data.clientNums + "</li>");
+                            html.push("<li>菜品：</li>");
+                            html.push("<li>———————————————</li>");
+                            $.each(data.data.goods, function (i, ele) {
+                                var gname = ele.gname;
+                                $.each(ele.prices, function (i, ele) {
+                                    price = ele.price;
+                                });
+                                $.each(ele.orderAndGoods, function (j, ele) {
+                                    gnums = ele.gnums;
+                                });
+                                html.push("<li>&nbsp;&nbsp;" + gname + "&nbsp;&nbsp;￥" + price + "&nbsp;&nbsp;X" + gnums + "</li>");
+                            });
+                            html.push("<li>———————————————</li>");
+                            html.push("<li>总价格：&nbsp;&nbsp;&nbsp;&nbsp;￥<span class='totalPrice'>" + data.data.totalPrice + "</span></li>");
+                            $("#order").html(html);
+                        }
+                    }
+                });
+            });
+
+
+        }
+
+        $(function () {
+
+            $("#toPay").hide();
+            $(document).on("click","#pay",function () {
+                var flag = $("#toPay").is(":hidden");
+                if(flag){
+                    $("#toPay").show();
+                }else{
+                    $("#toPay").hide();
+                }
+            });
+
+            $(document).on("click","#paySuccess",function () {
+                 var oid = $(".oid").text();
+                $.ajax({
+                    url: 'http://localhost:8080/order//order/setPay',
+                    data: {oid: oid},
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        alert("支付成功，请就餐");
+                         var dids = $(".dids").text();
+                        var searchUrl = encodeURI("http://localhost:8080/ui/views/eating.html?&dids="
+                            + dids+"&roomName="+roomName);
+                        window.location.href = searchUrl;
+                    }
+                });
+            });
+
+        });
+    </script>
+</head>
+<body onload="name()">
+<div id="head"></div>
+<div style="width: 500px">
+    <div>
+        <ul id="order" STYLE="list-style-type: none">
+
+        </ul>
+    </div>
+    <div style="width: 200px;margin-left: 200px">
+        <span id="pay">去支付</span>
+        <ul id="toPay" STYLE="list-style-type: none">
+            <li id="paySuccess" >支付成功</li>
+            <li id="payFalse" >支付失败</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

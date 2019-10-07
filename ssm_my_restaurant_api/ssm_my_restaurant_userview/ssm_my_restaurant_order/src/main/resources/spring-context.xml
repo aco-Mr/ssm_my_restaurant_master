@@ -48,6 +48,7 @@
                      pointcut="execution(* com.my.restaurant.api.od.service.*.*(..))" />
     </aop:config>
 
+    <aop:aspectj-autoproxy  expose-proxy="true"    proxy-target-class="true"/>
     <!-- 引入外部文件 -->
     <import resource="spring-context-druid.xml" />
     <import resource="spring-context-mybatis.xml" />

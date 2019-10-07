@@ -1,11 +1,13 @@
 package com.my.restaurant.api.od.dao;
 
-import com.my.restaurant.domain.Room;
+import com.my.restaurant.api.od.dto.Room;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface RoomDao {
-    public List<Room> findAll();
+
+    List<Room> findRoomType();
+    public List<Room> findAll(int rtype);
 }

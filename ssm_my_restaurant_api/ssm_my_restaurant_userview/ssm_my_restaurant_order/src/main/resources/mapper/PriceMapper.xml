@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mybatis sql映射文件 -->
+<!-- namespace：整合到spring之后，要求它的值必须与dao接口的全路径名一致 -->
+<mapper namespace="com.my.restaurant.api.od.dao.PriceDao">
+    <resultMap id="priceMap" type="com.my.restaurant.api.od.dto.Price">
+        <id property="pid" column="pid" />
+        <result property="ptime" column="ptime" />
+        <result property="price" column="price" />
+<!--       <association property="goods"  column="gid" select="com.my.restaurant.api.od.dao.GoodsDao.findAllStyle"/>-->
+    </resultMap>
+<select id="findByGoodsId" resultType="com.my.restaurant.api.od.dto.Price" parameterType="int">
+        SELECT price FROM a_price WHERE gid=#{gid} AND ptime IN (SELECT MAX(ptime) FROM a_price WHERE gid=#{gid})
+</select>
+
+</mapper>

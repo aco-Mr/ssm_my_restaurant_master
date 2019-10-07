@@ -25,7 +25,6 @@
         <setting name="aggressiveLazyLoading" value="false"/>
 
 
-
         <!-- 使全局的映射器启用或禁用缓存。 -->
         <!--
 			cacheEnabled：统一控制是否开启二级缓存，默认是false，

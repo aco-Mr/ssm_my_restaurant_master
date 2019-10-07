@@ -8,23 +8,53 @@
     <script type="text/javascript">
         $(function () {
             //全局变量
-            var roomName=new String();
+            var roomName = new String();
 
             $.ajax({
-                url: 'http://localhost:8080/order//room/findRooms',
+                url: 'http://localhost:8080/order//room/findRoomType',
                 type: 'post',
                 dataType: 'json',
                 success: function (data) {
                     if (data.data) {
-                        var html = [];
                         $.each(data.data, function (i, ele) {
-                            var str = " <li class='room'><span>" + ele.rname + "</span><span STYLE='display: none' >"+ele.rid+"</span> </li>";
-                            html.push(str);
+                            if (ele.rtype == 0) {
+                                $("#hall").html("<h3 class='rtype'>大厅<span style='display: none'>" + ele.rtype + "</span></h3>");
+                            } else {
+                                $("#Balcony").html("<h3 class='rtype'>包厢<span style='display: none'>" + ele.rtype + "</span></h3>");
+                            }
                         });
-                        $("#rooms").html(html);
+
                     }
                 }
             });
+
+            //点击包厢/大厅查找包厢大厅
+            $(document).on("click", ".rtype", function () {
+                var rtype = $(this).children("span:eq(0)").text();
+                $(".rtype").removeClass("clickRoom");
+                $(this).addClass("clickRoom");
+                $("#sits").html("<h1>XXX餐厅欢迎你</h1>")
+                findRoomsByType(rtype);
+            });
+
+            function findRoomsByType(rtype) {
+                $.ajax({
+                    url: 'http://localhost:8080/order//room/findRooms',
+                    data: {rtype: rtype},
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.data) {
+                            var html = [];
+                            $.each(data.data, function (i, ele) {
+                                var str = " <li class='room'><span>" + ele.rname + "</span><span STYLE='display: none' >" + ele.rid + "</span> </li>";
+                                html.push(str);
+                            });
+                            $("#rooms").html(html);
+                        }
+                    }
+                });
+            }
 
             //查找桌子
             function findRoomDesk(rid) {
@@ -35,13 +65,13 @@
                     dataType: 'json',
                     success: function (data) {
                         if (data.data) {
-                            var html=[];
+                            var html = [];
                             $.each(data.data, function (i, ele) {
-                                var str=new String();
-                                if(ele.dstatue==0){
-                                     str = "<li class='desk desk0'> <input type='checkbox' name='desk' value='"+ele.did+"' />" + ele.did + "号桌&nbsp;&nbsp;&nbsp;&nbsp;"+ele.dvolum+"人桌</input><br>";
-                                }else {
-                                    str = "<li class='desk desk1' >" + ele.did + "号桌&nbsp;&nbsp;&nbsp;&nbsp;"+ele.dvolum+"人桌</input><br>";
+                                var str = new String();
+                                if (ele.dstatue == 0) {
+                                    str = "<li class='desk desk0'> <input type='checkbox' name='desk' value='" + ele.did + "' />" + ele.did + "号桌&nbsp;&nbsp;&nbsp;&nbsp;" + ele.dvolum + "人桌</input><br>";
+                                } else {
+                                    str = "<li class='desk desk1' >" + ele.did + "号桌&nbsp;&nbsp;&nbsp;&nbsp;" + ele.dvolum + "人桌&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;占用中....<br>";
                                 }
                                 html.push(str);
                             });
@@ -51,7 +81,8 @@
                 });
             }
 
-            $(document).on("click",".room",function () {
+            //查看各大厅或包厢的桌子
+            $(document).on("click", ".room", function () {
                 roomName = $(this).children("span:eq(0)").text();
                 $(".room").removeClass("clickRoom");
                 $(this).addClass("clickRoom");
@@ -59,44 +90,46 @@
                 findRoomDesk(rid);
             });
 
-            $(document).on("click","#btn",function () {
-                var deskInfo="当前所选："+roomName+"  ";
-                var dids=[];
-                 $("input[name=desk]:checked").each(function (i) {
-                     dids.push($(this).val());
-                     deskInfo+=$(this).val()+"号桌   "
-                 });
-
-                var searchUrl = encodeURI("http://localhost:8080/ui/views/menus.html?&deskInfo="
-                    + deskInfo + "&dids="+dids);
-                window.location.href = searchUrl;
-                // $.ajax({
-                //         type:"POST",
-                //         dataType:"json",
-                //         url:"http://localhost:8080/ui/views/menus.html",//请求页面
-                //         data:{deskInfo:deskInfo,dids:dids},
-                //         complete:function(){location.href ="http://localhost:8080/ui/views/menus.html"}//跳转页面
-                // });
+            //跳转菜单
+            $(document).on("click", "#btn", function () {
+                var deskInfo = "当前所选：" + roomName + "  ";
+                var dids = [];
+                $("input[name=desk]:checked").each(function () {
+                    dids.push($(this).val());
+                    deskInfo += $(this).val() + "号桌   "
+                });
+                if (dids.length == 0) {
+                    alert("请选择桌子");
+                    return;
+                } else {
+                    var searchUrl = encodeURI("http://localhost:8080/ui/views/menus.html?&deskInfo="
+                        + deskInfo + "&dids=" + dids + "&roomName=" + roomName);
+                    window.location.href = searchUrl;
+                }
             });
 
-        })
+        });
     </script>
 
-<!--    样式-->
+    <!--    样式-->
     <style type="text/css">
-        .desk0{
+        .desk0 {
             background-color: skyblue;
         }
-        .desk1{
+
+        .desk1 {
             background-color: red;
         }
-        .clickRoom{
-            background-color:grey;
+
+        .clickRoom {
+            background-color: grey;
         }
-        .room{
+
+        .room {
             padding-top: 3px;
         }
-        .desk{
+
+        .desk {
             margin-top: 10px;
             margin-right: 50px;
         }
@@ -104,15 +137,21 @@
 </head>
 <body>
 <div>
-    <div style="width: 200px ;height: 300px;float: left">
-      <ul id="rooms" style="list-style-type:none">
+    <div STYLE="width: 100%">
+        <div id="hall" style="height: 50px;width:100px;float: left"></div>
 
-      </ul>
+        <div id="Balcony" style="height: 50px;width:100px;float: left"></div>
     </div>
-    <div  style="width: 400px ;height: 300px;float: left;background: grey">
-        <ul id="sits" style="list-style-type:none">
-
-        </ul>
+    <div>
+        <div style="width: 200px ;height: 300px;float: left">
+            <ul id="rooms" style="list-style-type:none">
+            </ul>
+        </div>
+        <div style="width: 400px ;height: 300px;float: left;background: grey">
+            <ul id="sits" style="list-style-type:none">
+                <h1>XXX餐厅欢迎你</h1>
+            </ul>
+        </div>
     </div>
     <input type="button" value="确定" id="btn" style="margin-left: -50px; margin-top: 310px">
 

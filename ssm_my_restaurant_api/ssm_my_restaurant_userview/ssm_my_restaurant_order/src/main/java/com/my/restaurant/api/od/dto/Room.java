@@ -1,4 +1,4 @@
-package com.my.restaurant.domain;
+package com.my.restaurant.api.od.dto;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -6,6 +6,7 @@ import java.util.Set;
 public class Room {
     private Integer rid;
     private String  rname;
+    private Integer rtype;
     private Integer rsize;
     private Integer rstatue;
     private String details;
@@ -21,6 +22,14 @@ public class Room {
         this.rstatue = rstatue;
         this.details = details;
         this.desks = desks;
+    }
+
+    public Integer getRtype() {
+        return rtype;
+    }
+
+    public void setRtype(Integer rtype) {
+        this.rtype = rtype;
     }
 
     public Integer getRid() {

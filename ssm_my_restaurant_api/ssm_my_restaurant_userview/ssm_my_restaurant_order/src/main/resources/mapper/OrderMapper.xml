@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mybatis sql映射文件 -->
+<!-- namespace：整合到spring之后，要求它的值必须与dao接口的全路径名一致 -->
+<mapper namespace="com.my.restaurant.api.od.dao.OrderDao">
+    <!-- 方法名与id对应 -->
+    <!-- 注意：sql后不能带分号 -->
+    <!--
+        1) id属性：方法名与id对应
+        2) resultType：配置结果类型，注意：列名要与属性名对应
+    -->
+
+    <insert id="saveOrder" keyColumn="oid" keyProperty="oid" useGeneratedKeys="true" parameterType="com.my.restaurant.api.od.dto.Order">
+        <!--@mbg.generated-->
+        insert into a_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="oid != null ">
+                oid,
+            </if>
+            <if test="did != null">
+                did,
+            </if>
+            <if test="userId != null">
+                userid,
+            </if>
+            <if test="clientNums != null">
+                clientNums,
+            </if>
+            <if test="discount != null">
+                discount,
+            </if>
+            <if test="teaFee != null">
+                teaFee,
+            </if>
+            <if test="totalPrice != null">
+                totalPrice,
+            </if>
+            <if test="startDateTime != null">
+                startDateTime,
+            </if>
+            <if test="eatStartTime != null">
+                eatStartTime,
+            </if>
+            <if test="eatTime != null">
+                eatTime,
+            </if>
+            <if test="payTime != null">
+                payTime,
+            </if>
+            <if test="isPay != null">
+                isPay,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="oid != null">
+                #{oid,jdbcType=INTEGER},
+            </if>
+            <if test="did != null">
+                #{did},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="clientNums != null">
+                #{clientNums,jdbcType=INTEGER},
+            </if>
+            <if test="discount != null">
+                #{discount,jdbcType=DOUBLE},
+            </if>
+            <if test="teaFee != null">
+                #{teaFee,jdbcType=INTEGER},
+            </if>
+            <if test="totalPrice != null">
+                #{totalPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="startDateTime != null">
+                #{startDateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="eatStartTime != null">
+                #{eatStartTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="eatTime != null">
+                #{eatTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="payTime != null">
+                #{payTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isPay != null">
+                #{isPay,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <resultMap id="orderMap" type="com.my.restaurant.api.od.dto.Order">
+        <id property="oid" column="oid"/>
+        <result property="did" column="did"/>
+        <result property="userId" column="user_id"/>
+        <result property="clientNums" column="client_nums"/>
+        <result property="discount" column="discount"/>
+        <result property="teaFee" column="tee_fee"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="StartDateTime" column="start_date_time"/>
+        <result property="eatStartTime" column="eat_start_time"/>
+        <result property="eatTime" column="eat_time"/>
+        <result property="payTime" column="pay_time"/>
+        <result property="isPay" column="is_pay"/>
+        <result property="state" column="state"/>
+        <collection property="goods" ofType="com.my.restaurant.api.od.dto.Goods" column="oid"
+                    select="com.my.restaurant.api.od.dao.GoodsDao.findByOrderId" />
+    </resultMap>
+    <select id="findOrderById" resultMap="orderMap" resultType="com.my.restaurant.api.od.dto.Order" parameterType="int">
+        select *
+        from a_order
+        where oid=#{oid}
+    </select>
+    <update id="setPay" parameterType="int" >
+        update a_order set isPay=1,payTime=now() where oid=#{oid}
+    </update>
+
+
+</mapper>

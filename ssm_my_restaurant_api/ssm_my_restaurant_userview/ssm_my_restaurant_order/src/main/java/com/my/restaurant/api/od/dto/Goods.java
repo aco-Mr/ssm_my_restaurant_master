@@ -1,27 +1,38 @@
-package com.my.restaurant.domain;
+package com.my.restaurant.api.od.dto;
 
-import javafx.scene.chart.PieChart;
-
-import java.util.Date;
+import java.util.*;
 
 public class Goods {
     private Integer gid;
     private String gname;
     private String gtype;
     private String gimag;
+    private  List<Price> prices=new ArrayList<Price>();
     private Date gaddtime;
+    private Integer gstate;
     private String gdetails;
+    private List<OrderAndGoods> orderAndGoods=new ArrayList<>();
+
+    public List<Price> getPrices() {
+        return prices;
+
+    }
+
+    public void setPrices(List<Price> prices) {
+        this.prices = prices;
+    }
 
     public Goods() {
     }
 
-    public Goods(Integer gid, String gname, String gtype, String gimag, Date gaddtime, String gdetails) {
+    public Goods(Integer gid, String gname, String gtype, String gimag, Date gaddtime, String gdetails , List<Price> prices) {
         this.gid = gid;
         this.gname = gname;
         this.gtype = gtype;
         this.gimag = gimag;
         this.gaddtime = gaddtime;
         this.gdetails = gdetails;
+        this.prices=prices;
     }
 
     public Integer getGid() {
@@ -72,15 +83,19 @@ public class Goods {
         this.gdetails = gdetails;
     }
 
-    @Override
-    public String toString() {
-        return "Goods{" +
-                "gid=" + gid +
-                ", gname='" + gname + '\'' +
-                ", gtype='" + gtype + '\'' +
-                ", gimag='" + gimag + '\'' +
-                ", gaddtime=" + gaddtime +
-                ", gdetails='" + gdetails + '\'' +
-                '}';
+    public List<OrderAndGoods> getOrderAndGoods() {
+        return orderAndGoods;
+    }
+
+    public void setOrderAndGoods(List<OrderAndGoods> orderAndGoods) {
+        this.orderAndGoods = orderAndGoods;
+    }
+
+    public Integer getGstate() {
+        return gstate;
+    }
+
+    public void setGstate(Integer gstate) {
+        this.gstate = gstate;
     }
 }

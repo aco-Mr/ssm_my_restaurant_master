@@ -1,4 +1,4 @@
-package com.my.restaurant.domain;
+package com.my.restaurant.api.od.dto;
 
 public class Desk {
     private Integer did;
@@ -7,6 +7,10 @@ public class Desk {
     private Room room;
 
     public Desk() {
+    }
+
+    public Desk(Integer did) {
+        this.did = did;
     }
 
     public Desk(Integer did, Integer dvolum, Integer dstatue, Room room) {
