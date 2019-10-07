@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 @Controller
 @RequestMapping("/classify")
 public class ClassifyController {
+    static int nums=0;
     @Autowired
     private ClassifyService classifyService;
 
@@ -58,6 +59,8 @@ public class ClassifyController {
         String dateFormat = df.format(date);
         //设置时间
         classify.setDate(dateFormat);
+        //设置号码
+        classify.setCid(++nums);
         System.out.println("classify:" + classify);
         int rows = classifyService.addClassify(classify);
         System.out.println("rows:" + rows);
