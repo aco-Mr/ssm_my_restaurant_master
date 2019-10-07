@@ -213,7 +213,6 @@ public class OperationServiceImpl implements OperationService {
      */
     @Override
     public ResultGoods<Integer> updateGoods(GoodsVo goodsVo) {
-        //先判断修改价格还是修改菜品主信息
         //修改菜品主体信息
         //创建菜品对象
         Goods goods = new Goods();
@@ -223,7 +222,7 @@ public class OperationServiceImpl implements OperationService {
             List<Goods> goods1 = goodsService.selectGoods(goods);
             goods1.forEach(s -> System.out.println("s:" + goods1));
             //菜品名称不存在,如果菜品名称不存在则将数据库中的所有菜品查询出来,或者为null
-            if (goods1.size()>0||goods1 == null) {
+            if (goods1.size()!=1||goods1 == null) {
                 //2.设置gid，根据gid去修改信息
                 //获得gid
                 goods.setGid(goodsVo.getGid());

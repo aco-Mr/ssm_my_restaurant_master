@@ -91,7 +91,6 @@ public class GoodsController {
     @PostMapping("/update")
     @ResponseBody
     public ResultGoods<Integer> updateGood(@RequestBody GoodsVo goodsVo) {
-        System.out.println();
         ResultGoods<Integer> result = operationService.updateGoods(goodsVo);
         System.out.println("haha:"+result.getMsg());
         return result;
