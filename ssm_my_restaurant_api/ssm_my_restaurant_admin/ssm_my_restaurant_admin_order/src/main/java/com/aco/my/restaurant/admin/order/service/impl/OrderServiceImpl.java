@@ -14,12 +14,23 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
 
     @Override
-    public List<Order> findByCondition1(Order order) {
-        return orderDao.findByCondition1(order);
+    public List<OrderDto> findByCondition1(String uname,String startDateTime,Integer val, String date) {
+        return orderDao.findByCondition1(uname,startDateTime,val,date);
+    }
+
+    @Override
+    public int updateOrder(Integer oid, Integer isPay) {
+        return orderDao.updateOrder(oid,isPay);
     }
 
     @Override
     public int daleteOrder(Integer oid) {
         return orderDao.daleteOrder(oid);
     }
+
+    @Override
+    public int insertOreder(Order order) {
+        return orderDao.insertOreder(order);
+    }
+
 }

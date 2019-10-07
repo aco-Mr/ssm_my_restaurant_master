@@ -26,14 +26,14 @@ import java.util.List;
 public class Test1 {
     @Autowired
     private OrderService orderService;
-    @Test
-    public void test(){
-        Order order = new Order();
-        List<Order> list = orderService.findByCondition1(order);
-        List<OrderDto> list1 = new ArrayList<>();
-        BeanUtils.copyProperties(list,list1);
-        for(Order l:list){
-            System.out.println(l);
-        }
-    }
+//    @Test
+//    public void test(){
+//        Order order = new Order();
+//        List<Order> list = orderService.findByCondition1(order);
+//        List<OrderDto> list1 = new ArrayList<>();
+//        BeanUtils.copyProperties(list,list1);
+//        for(Order l:list){
+//            System.out.println(l);
+//        }
+//    }
 }

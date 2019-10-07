@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aco.my.restaurant.admin.desk.dao.DeskDao">
+  <resultMap id="BaseResultMap" type="com.aco.my.restaurant.admin.desk.dto.DeskDto">
+    <!--@mbg.generated-->
+    <id column="did" jdbcType="INTEGER" property="did" />
+    <result column="dvolum" jdbcType="INTEGER" property="dvolum" />
+    <result column="dstatue" jdbcType="INTEGER" property="dstatue" />
+    <result column="fid" jdbcType="INTEGER" property="fid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    did, dvolum, dstatue, fid
+  </sql>
+    <select id="findByCondition1" resultMap="BaseResultMap">
+        select d.did,d.dvolum,d.dstatue
+        FROM a_desk d,a_room r where d.fid = r.rid and r.rtype=#{rtype}
+<!--    select d.did,d.dvolum,d.dstatue,r.rtype-->
+<!--    FROM a_desk d LEFT JOIN a_room r ON d.fid = r.rid-->
+  </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from a_desk
+        where did = #{did,jdbcType=INTEGER}
+    </select>
+    <select id="selectByFid" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List" />
+        from a_desk
+        where fid = #{fid,jdbcType=INTEGER}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+   from a_desk
+  </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from a_desk
+    where did = #{did,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.my.restaurant.domain.Desk" useGeneratedKeys="true" keyColumn="did" keyProperty="did">
+    insert into a_desk (dvolum, dstatue,
+      fid)
+    values (#{dvolum,jdbcType=INTEGER}, #{dstatue,jdbcType=INTEGER},#{fid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.my.restaurant.domain.Desk">
+    insert into a_desk
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="did != null">
+        did,
+      </if>
+      <if test="dvolum != null">
+        dvolum,
+      </if>
+      <if test="dstatue != null">
+        dstatue,
+      </if>
+      <if test="fid != null">
+        fid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="did != null">
+        #{did,jdbcType=INTEGER},
+      </if>
+      <if test="dvolum != null">
+        #{dvolum,jdbcType=INTEGER},
+      </if>
+      <if test="dstatue != null">
+        #{dstatue,jdbcType=INTEGER},
+      </if>
+      <if test="fid != null">
+        #{fid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.my.restaurant.domain.Desk">
+    update a_desk
+    <set>
+      <if test="dvolum != null">
+        dvolum = #{dvolum,jdbcType=INTEGER},
+      </if>
+      <if test="dstatue != null">
+        dstatue = #{dstatue,jdbcType=INTEGER},
+      </if>
+      <if test="fid != null">
+        fid = #{fid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where did = #{did,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.my.restaurant.domain.Desk">
+    <!--@mbg.generated-->
+    update a_desk
+    set dvolum = #{dvolum,jdbcType=INTEGER},
+      dstatue = #{dstatue,jdbcType=INTEGER},
+      fid = #{fid,jdbcType=INTEGER}
+    where did = #{did,jdbcType=INTEGER}
+  </update>
+    <update id="updateStatue" >
+        update a_desk
+        <set>
+            <if test="dstatue != null">
+                dstatue = #{dstatue,jdbcType=INTEGER},
+            </if>
+        </set>
+        where did = #{did,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>insert</title>
+    <script src="/ssm_my_restaurant_ui/static/js/jquery/jquery-1.8.3.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(function () {
+            getDeskTab()
+            $("#rtype").change(function () {
+                var options = $("#rtype").children("option:selected").val();
+                if (options == 0) {
+                    // $('#tab').html();
+                    getDeskTab()
+                } else {
+                    getRoomTab()
+                }
+            });
+        });
+        function getDeskTab(){
+            $("#tab").html('<tr><td colspan="6"><input type="button" value="保存" id="add" onclick="onInsertDesk()">\n' +
+                '    <input type="submit" value="返回" onclick="javascript:history.go(-1)"></td></tr><tr>\n' +
+                '        <td>餐桌容量</td>\n' +
+                '        <td><select id="dvolum">\n' +
+                '            <option>2</option>\n' +
+                '            <option>3</option>\n' +
+                '            <option>4</option>\n' +
+                '            <option>5</option>\n' +
+                '            <option>6</option>\n' +
+                '            <option>7</option>\n' +
+                '            <option>8</option>\n' +
+                '        </select></td>\n' +
+                '        <td>餐桌状态</td>\n' +
+                '        <td><select id="dstatue">\n' +
+                '            <option value="0">空置</option>\n' +
+                '            <option value="1">使用中</option>\n' +
+                '        </select></td>\n' +
+                '        <td>房间编号</td>\n' +
+                '        <td><select id="fid">\n' +
+                '            <option>1</option>\n' +
+                '            <option>2</option>\n' +
+                '        </select></td>\n' +
+                '    </tr>\n')
+        }
+        function getRoomTab() {
+            $('#tab').html('<tr><td colspan="10"><input type="button" value="保存" id="add" onclick="onInsertRoom()">\n' +
+                '    <input type="submit" value="返回" onclick="javascript:history.go(-1)"></td></tr><tr>\n' +
+                '        <td>包厢名字</td>\n' +
+                '        <td><input id="rname"></td>\n' +
+                // '        <td>房间类型</td>\n' +
+                // '        <td><select id="rtype">\n' +
+                // '            <option value="0">大厅</option>\n' +
+                // '            <option value="1">包厢</option>\n' +
+                '        </select></td>\n' +
+                '        <td>房间容量</td>\n' +
+                '        <td><select id="rsize">\n' +
+                '            <option>15</option>\n' +
+                '            <option>20</option>\n' +
+                '        </select></td>\n' +
+                '        <td>房间状态</td>\n' +
+                '        <td><select id="rstatue">\n' +
+                '            <option value="0">空置</option>\n' +
+                '            <option value="1">使用中</option>\n' +
+                '        </select></td>\n' +
+                '        <td>房间描述</td>\n' +
+                '        <td><input id="details"></td>\n' +
+                '    </tr>\n')
+
+        }
+        function onInsertDesk() {
+            if($("#dstatue").find("option:selected").text()=="空置"){
+                $("#dstatue").val()
+            }else{
+                $("#dstatue").val()
+            }
+                var desk = {dvolum: $("#dvolum").val(), dstatue: $("#dstatue").val(), fid: $("#fid").val()};
+                $.ajax({
+                    url: '/ssm_my_restaurant_admin_desk/desk/insert',
+                    data: {desk: JSON.stringify(desk)},
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        alert("添加成功");
+                    }
+                })
+            }
+        function onInsertRoom() {
+            if($("#rtype").find("option:selected").text()=="大厅"){
+                $("#rtype").val()
+            }else{
+                $("#rtype").val()
+            }if($("#rstatue").find("option:selected").text()=="空置"){
+                $("#rstatue").val()
+            }else{
+                $("#rstatue").val()
+            }
+            var room = {rname:$("#rname").val(),rtype:$("#rtype").val(),rsize:$("#rsize").val(),
+                rstatue:$("#rstatue").val(),details:$("#details").val()};
+            $.ajax({
+                url:'/ssm_my_restaurant_admin_desk/room/insert',
+                data:{room:JSON.stringify(room)},
+                type:'post',
+                dataType:'json',
+                success:function () {
+                    alert("添加成功");
+                }
+            })
+        }
+
+    </script>
+</head>
+<body>
+<tr>
+    <td>房间类型</td>
+    <td><select id="rtype">
+    <option value="0" selected="selected">大厅</option>
+    <option value="1">包厢</option>
+</select></td>
+</tr>
+<table border="1" id="tab">
+
+</table>
+</body>
+</html>

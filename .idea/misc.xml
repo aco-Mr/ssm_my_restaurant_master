@@ -5,6 +5,9 @@
     <file type="web" url="file://$PROJECT_DIR$/ssm_my_restaurant_api/ssm_my_restaurant_userview" />
     <file type="web" url="file://$PROJECT_DIR$/ssm_my_restaurant_ui" />
   </component>
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="JS_1_8_5" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
