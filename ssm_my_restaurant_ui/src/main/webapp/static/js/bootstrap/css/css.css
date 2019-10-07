@@ -80,7 +80,7 @@ a.left-font03:hover {
 	text-decoration: underline;
 }
 .right-table01 {
-	background-image: url(../img/goods/button01.gif);
+	background-image: url(../static/js/bootstrap/img/goods/button01.gif);
 	text-align: center;
 	height: 40px;
 	float: left;
