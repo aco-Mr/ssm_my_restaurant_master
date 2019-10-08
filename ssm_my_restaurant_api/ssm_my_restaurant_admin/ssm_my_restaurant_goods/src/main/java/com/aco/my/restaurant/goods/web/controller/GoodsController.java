@@ -154,7 +154,7 @@ public class GoodsController {
                             OutputStream os = new FileOutputStream(newFile)
                     ){
                         IOUtils.copy(is,os);// 文件拷贝
-                        fileNameList.add("/upload/"+fileName);//文件名添加到集合中
+                        fileNameList.add(fileName);//文件名添加到集合中
                     }catch (Exception e){
                         e.printStackTrace();
                     }

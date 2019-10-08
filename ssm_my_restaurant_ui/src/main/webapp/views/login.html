@@ -43,7 +43,11 @@
                     //判断是否登录成功
                     if (data.state == 200) {
                         alert(data.msg);
-                        window.location.href='index.html';
+                        if(data.data.ustate==2){
+                            window.location.href='adminindex.html';
+                        }else{
+                            window.location.href='index.html';
+                        }
                     }
                     //登录不成功
                     else {

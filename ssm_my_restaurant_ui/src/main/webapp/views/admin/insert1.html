@@ -3,10 +3,10 @@
 <head>
 	<meta charset="UTF-8">
 	<title>insert</title>
-	<script src="/static/js/bootstrap/js/jquery/jquery-1.8.3.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/ui/static/js/bootstrap/js/jquery/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 		$(function () {
-			getDeskTab()
+			getDeskTab();
 			$("#rtype").change(function () {
 				var options = $("#rtype").children("option:selected").val();
 				if (options == 0) {
@@ -58,7 +58,7 @@
 					'\t\t\t\t\t\t\t         </select></td>\n' +
 					'\t\t\t\t\t    </tr>' +
 					'<tr><td colspan="10" align="center" height="50px"><input type="button" value="保存" id="add" class="button" onclick="onInsertDesk()">\n' +
-					'\t\t\t\t\t\    <input type="button" value="返回" class="button" onclick="window.location.href=\'/ui/views/desk1.html\'"></td></tr>')
+					'\t\t\t\t\t\    <input type="button" value="返回" class="button" onclick="window.location.href=\'/ui/views/admin/desk1.html\'"></td></tr>')
                     getRoomRname();
 		}
 		function getRoomTab() {
@@ -101,7 +101,7 @@
 					'\t\t\t\t\t    <td colspan="3"><textarea id="details" cols="100" rows="8"></textarea></td>\n' +
 					'\t\t\t\t\t    </tr>' +
 					'<tr><td colspan="10" align="center" height="50px"><input type="button" value="保存" id="add" class="button" onclick="onInsertRoom()">\n' +
-					'<input type="submit" value="返回" class="button" onclick="window.location.href=\'/ui/views/desk1.html\'"></td></tr>')
+					'<input type="submit" value="返回" class="button" onclick="window.location.href=\'/ui/views/admin/desk1.html\'"></td></tr>')
 		}
 		function onInsertDesk() {
 			if($("#dstatue").find("option:selected").text()=="空置"){
@@ -117,7 +117,7 @@
 				dataType: 'json',
 				success: function (data) {
 					alert("添加成功");
-					location.href="/ui/views/desk1.html"
+					location.href="/ui/views/admin/desk1.html"
 
 				}
 			})
@@ -157,17 +157,16 @@
 				dataType:'json',
 				success:function () {
 					alert("添加成功");
-					location.href="/ui/views/desk1.html"
+					location.href="/ui/views/admin/desk1.html"
 				}
 			})
 		}
-
 	</script>
 
 <style type="text/css">
 
 .ContentBody{
-	background:#F6F6F6 url(../static/images/mainbg.gif);
+	background:#F6F6F6 url(/ui/static/js/bootstrap/img/goods/mainbg.gif);
 	/*url(../images/mainback.jpg) repeat-x fixed; */
 	margin:15px;}
 

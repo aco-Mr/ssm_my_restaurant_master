@@ -3,9 +3,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
 <title>项目管理系统</title>
-    <link href="/static/js/bootstrap/css/css.css" rel="stylesheet" type="text/css" charset="utf-8"/>
-    <link href="/static/js/bootstrap/css/style.css" rel="stylesheet" type="text/css" charset="utf-8"/>
-    <script src="/static/js/bootstrap/js/jquery/jquery-1.8.3.js" type="text/javascript" charset="utf-8"></script>
+    <link href="/ui/static/js/bootstrap/css/css.css" rel="stylesheet" type="text/css" charset="utf-8"/>
+    <link href="/ui/static/js/bootstrap/css/style.css" rel="stylesheet" type="text/css" charset="utf-8"/>
+    <script src="/ui/static/js/bootstrap/js/jquery/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
     <style type="text/css">
         <!--
         body {
@@ -33,13 +33,34 @@
             onQuery(1);
         });
 
+        //传sid到修改页面
+        $(document).on("click","#details",function () {
+            var a =$(this).parent().parent().find("td:eq(0)").text();
+            url = "http://localhost:8080/ui/views/admin/updateyuangong.html?sid="+a
+            window.location.href=url;
+        });
+        //离职
+        $(document).on("click","#quits",function () {
+            var sid = $(this).parent().parent().find("td:eq(0)").text();
+            var state = $(this).parent().parent().find("td:eq(10)").text();
+            $.ajax({
+                url:'/admin_staff/staff/quit',
+                data:{sid:sid,state:state},
+                type:'post',
+                dataType:'json',
+                success:function () {
+                    location.reload();
+                }
+            });
+        });
+
         //分页
         function onQuery(pageNum) {
             // var stu ={"sid":$("#sid").val(),"sname":$("#sname").val()};
             var stu ={"sid":$("#sid").val(),"sname":$("#sname").val()};
 
             $.ajax({
-                url:'/staff/staff/list',
+                url:'/admin_staff/staff/list',
                 data:{pageNum:pageNum,pageSize:2,stu:JSON.stringify(stu)},
                 type:'post',
                 dataType:'json',
@@ -68,11 +89,11 @@
                             var c ="无";
                             if (ele.state == 1){
                                 tr=tr.replace(/{state}/g,a)
-                                tr=tr.replace(/{xiangqin}/g,'<input type="button" value="修改" class="right-button02" id="details"><input type="button" value="离职" class="right-button02"  onclick="quit()" id="quits" style="margin-left:5px">');
+                                tr=tr.replace(/{xiangqin}/g,'<input type="button" value="修改" class="right-button02" id="details"><input type="button" value="离职" class="right-button02"  id="quits" style="margin-left:5px">');
 
                             }else if (ele.state == 2){
                                 tr=tr.replace(/{state}/g,b)
-                                tr=tr.replace(/{xiangqin}/g,'<input type="button" value="修改" class="right-button02" id="details"><input type="button" value="在职" class="right-button02"  onclick="quit()" id="quits" style="margin-left:5px">');
+                                tr=tr.replace(/{xiangqin}/g,'<input type="button" value="修改" class="right-button02" id="details"><input type="button" value="在职" class="right-button02"  id="quits" style="margin-left:5px">');
                             }
                             if (ele.exitDate == null){
                                 tr=tr.replace(/{exitDate}/g,c);
@@ -100,28 +121,6 @@
             });
         }
 
-        //传sid到修改页面
-        $("#details").live("click",function () {
-            var a =$(this).parent().parent().find("td:eq(0)").text();
-            url = "http://localhost:8080/ui/views/admin/updateyuangong.html?sid="+a
-            window.location.href=url;
-        });
-
-
-        //离职
-        $("#quits").live("click",function () {
-            var sid = $(this).parent().parent().find("td:eq(0)").text();
-            var state = $(this).parent().parent().find("td:eq(10)").text();
-            $.ajax({
-                url:'/staff/staff/quit',
-                data:{sid:sid,state:state},
-                type:'post',
-                dataType:'json',
-                success:function (data) {
-                    onQuery(1)
-                }
-            })
-        });
 
         //分页
         function onJumpPage(_type) {
@@ -157,12 +156,12 @@
   <tr>
     <td height="30">      <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
-          <td height="62" background="/static/js/bootstrap/img/goods/nav04.gif">
+          <td height="62" background="/ui/static/js/bootstrap/img/goods/nav04.gif">
             
 		   <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
 		    <tr>
 			  <td width="24">
-                <img src="/static/js/bootstrap/img/goods/ico07.gif" width="20" height="18" />
+                <img src="/ui/static/js/bootstrap/img/goods/ico07.gif" width="20" height="18" />
                 员工ID:<input name="textfield" type="text" size="12"  id="sid"/>
                 员工姓名:<input name="textfield" type="text" size="12"  id="sname"/>
 			   <input name="Submit" type="button" class="right-button02" value="查 询"  onclick="onQuery(1)"/>
@@ -239,7 +238,7 @@
       </table>
       <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
         <tr>
-          <td height="6"><img src="/static/js/bootstrap/img/goods/spacer.gif" width="1" height="1" /></td>
+          <td height="6"><img src="/ui/static/js/bootstrap/img/goods/spacer.gif" width="1" height="1" /></td>
         </tr>
         <tr>
           <td height="33"><table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="right-font08">
