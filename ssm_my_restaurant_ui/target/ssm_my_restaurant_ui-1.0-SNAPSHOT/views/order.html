@@ -20,9 +20,19 @@
         function onQuery(pageNum) {
             // var json = {uname: $("#uname").val()};
                 var uname = $("#uname").val()
+                var val = 0;
+                if($("#startDateTime").find("option:selected").text()=="今天"){
+                     val=$("#startDateTime").val();
+                }else if($("#startDateTime").find("option:selected").text()=="昨天"){
+                     val=$("#startDateTime").val();
+                }else if($("#startDateTime").find("option:selected").text()=="三天前") {
+                     val = $("#startDateTime").val();
+                }else if($("#startDateTime").find("option:selected").text()=="一星期前") {
+                     val = $("#startDateTime").val();
+                }
             $.ajax({
                 url: '/ssm_my_restaurant_admin_order/order/list',
-                data: {uname:uname,pageNum: pageNum, pageSize: 2},
+                data: {uname:uname,val:val,pageNum: pageNum, pageSize: 2},
                 type: 'post',
                 dataType: 'json',
                 // contentType:'application/json',

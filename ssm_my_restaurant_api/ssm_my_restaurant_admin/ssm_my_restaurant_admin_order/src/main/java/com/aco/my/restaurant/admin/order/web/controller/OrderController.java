@@ -27,6 +27,7 @@ public class OrderController {
         Date t = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String date = df.format(t);
+        System.out.println(date);
         PageHelper.startPage(pageNum, pageSize);
         List<OrderDto> list = orderService.findByCondition1(uname,startDateTime,val,date);
         list.forEach(s -> System.out.println(s));

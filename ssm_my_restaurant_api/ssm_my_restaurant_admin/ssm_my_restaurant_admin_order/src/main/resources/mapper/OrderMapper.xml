@@ -62,16 +62,16 @@ FROM
         and u.uname like "%"#{uname}"%"
     </if>
     <if test="val == 0">
-         and TO_DAYS(NOW())-TO_DAYS(startDateTime) &lt;= 0
+         and TO_DAYS(NOW())-TO_DAYS(DATE) &lt;= 0
     </if>
     <if test="val == 1">
-            and TO_DAYS(NOW())-TO_DAYS(startDateTime) &lt;= 1
+            and TO_DAYS(NOW())-TO_DAYS(DATE ) &lt;= 1
     </if>
     <if test="val == 3">
-            and DATE_SUB(CURDATE(), INTERVAL 3 DAY) &lt;= date #{date}
+            and DATE_SUB(CURDATE(), INTERVAL 3 DAY) &lt;= DATE(#{date})
     </if>
     <if test="val == 7">
-            and DATE_SUB(CURDATE(), INTERVAL 7 DAY)&lt;= date #{date}
+            and DATE_SUB(CURDATE(), INTERVAL 7 DAY)&lt;= DATE(#{date})
     </if>
 
 <!--	<where>-->

@@ -61,17 +61,17 @@ FROM
 	<if test="uname != null and uname != ''">
         and u.uname like "%"#{uname}"%"
     </if>
-    <if test="startDateTime == 0">
-         and TO_DAYS(NOW())-TO_DAYS(startDateTime)=0
+    <if test="val == 0">
+         and TO_DAYS(NOW())-TO_DAYS(DATE) &lt;= 0
     </if>
-    <if test="startDateTime == 1">
-            and TO_DAYS(NOW())-TO_DAYS(startDateTime) &lt;=1
+    <if test="val == 1">
+            and TO_DAYS(NOW())-TO_DAYS(startDateTime) &lt;= 1
     </if>
-    <if test="startDateTime == 3">
-            and DATE_SUB(CURDATE(), INTERVAL 3 DAY) &lt;=3
+    <if test="val == 3">
+            and DATE_SUB(CURDATE(), INTERVAL 3 DAY) &lt;= DATE(#{date})
     </if>
-    <if test="startDateTime == 7">
-            and DATE_SUB(CURDATE(), INTERVAL 7 DAY)&lt;=7
+    <if test="val == 7">
+            and DATE_SUB(CURDATE(), INTERVAL 7 DAY)&lt;= DATE(#{date})
     </if>
 
 <!--	<where>-->
