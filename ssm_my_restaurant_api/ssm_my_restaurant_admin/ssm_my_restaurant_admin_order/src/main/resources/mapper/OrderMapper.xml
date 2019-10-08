@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mybatis sql映射文件 -->
+<!-- namespace：整合到spring之后，要求它的值必须与dao接口的全路径名一致 -->
+<mapper namespace="com.aco.my.restaurant.admin.order.dao.OrderDao">
+    <resultMap id="BaseResultMap" type="com.aco.my.restaurant.admin.order.dto.OrderDto">
+        <id column="oid" property="oid"/>
+        <result column="did" property="did"/>
+        <result column="userId" property="userId"/>
+        <result column="clientNums" property="clientNums"/>
+        <result column="discount" property="discount"/>
+        <result column="teaFee" property="teaFee"/>
+        <result column="totalPrice" property="totalPrice"/>
+        <result column="startDateTime" property="startDateTime"/>
+        <result column="eatStartTime" property="eatStartTime"/>
+        <result column="eatTime" property="eatTime"/>
+        <result column="payTime" property="payTime"/>
+        <result column="isPay" property="isPay"/>
+        <result column="state" property="state"/>
+        <association property="goods" javaType="com.my.restaurant.domain.Goods">
+            <id column="gid" property="gid"/>
+            <result column="gname" property="gname"/>
+            <result column="gimag" property="gimag"/>
+        </association>
+        <association property="price" javaType="com.my.restaurant.domain.Price">
+            <id column="pid" property="pid"/>
+            <result column="price" property="price"/>
+        </association>
+        <association property="orderandgoods" javaType="com.my.restaurant.domain.Orderandgoods">
+            <id column="id" property="id"/>
+            <result column="gnums" property="gnums"/>
+        </association>
+        <association property="user" javaType="com.my.restaurant.domain.User">
+            <id property="uid" column="uid"/>
+            <result column="uname" property="uname"/>
+        </association>
+        <association property="room" javaType="com.my.restaurant.domain.Room">
+            <id property="rid" column="rid"/>
+            <result column="rname" property="rname"/>
+        </association>
+    </resultMap>
+    <select id="findByCondition1" resultMap="BaseResultMap">
+       SELECT
+	o.*,
+	g.gname,
+	g.gimag,
+	a.gnums,
+	p.price,
+	u.uname,
+	r.rname
+FROM
+	a_orderandgoods a
+	LEFT JOIN a_order o ON a.oid = o.oid
+	LEFT JOIN a_goods g ON a.gid = g.gid
+	LEFT JOIN a_user u ON o.userId = u.uid
+	LEFT JOIN a_desk d ON o.did = d.did
+	LEFT JOIN a_room r ON r.rid = d.fid
+	LEFT JOIN a_price p ON g.gid = p.pid
+	where 1=1
+	<if test="uname != null and uname != ''">
+        and u.uname like "%"#{uname}"%"
+    </if>
+    <if test="val == 0">
+         and TO_DAYS(NOW())-TO_DAYS(DATE) &lt;= 0
+    </if>
+    <if test="val == 1">
+            and TO_DAYS(NOW())-TO_DAYS(DATE ) &lt;= 1
+    </if>
+    <if test="val == 3">
+            and DATE_SUB(CURDATE(), INTERVAL 3 DAY) &lt;= DATE(#{date})
+    </if>
+    <if test="val == 7">
+            and DATE_SUB(CURDATE(), INTERVAL 7 DAY)&lt;= DATE(#{date})
+    </if>
+
+<!--	<where>-->
+<!--        <choose>-->
+<!--        </choose>-->
+<!--    </where>-->
+    </select>
+    <!--修改-->
+    <update id="updateOrder">
+        update a_order set isPay=#{isPay} where oid = #{oid}
+    </update>
+    <!--     删除 -->
+    <delete id="daleteOrder" parameterType="int">
+        delete from a_order where oid=#{oid}
+    </delete>
+    <insert id="insertOreder" parameterType="com.my.restaurant.domain.Order">
+        INSERT into a_order(did,userId,clientNums,discount,teaFee,totalPrice,startDateTime,eatStartTime,eatTime,payTime,isPay,state)
+        values(#{did},#{userId},#{clientNums},#{discount},#{teaFee},#{totalPrice},#{startDateTime},#{eatStartTime},#{eatTime},#{payTime},#{isPay},#{state})
+    </insert>
+</mapper>

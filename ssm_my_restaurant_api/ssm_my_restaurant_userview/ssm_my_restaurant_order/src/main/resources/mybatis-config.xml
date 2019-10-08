@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <!-- 全局参数 -->
+    <settings>
+        <!-- 打印 SQL 语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+        <!-- 设置 JDBC 类型为空时,某些驱动程序 要指定值, default:OTHER，插入空值时不需要指定类型 -->
+        <setting name="jdbcTypeForNull" value="NULL"/>
+        <!-- 使用驼峰命名法转换字段。 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+
+        <!-- 全局启用或禁用延迟加载。当禁用时，所有关联对象都会即时加载。 -->
+        <!--
+            value=false：立即加载，不和aggressiveLazyLoading的值为什么
+            value=true：开启延迟加载
+        -->
+        <setting name="lazyLoadingEnabled" value="true"/>
+
+        <!-- 当启用时，有延迟加载属性的对象在被调用时将会完全加载任意属性。否则，每种属性将会按需要加载。 -->
+        <!-- value=false：表示延迟加载 -->
+        <setting name="aggressiveLazyLoading" value="false"/>
+
+
+        <!-- 使全局的映射器启用或禁用缓存。 -->
+        <!--
+			cacheEnabled：统一控制是否开启二级缓存，默认是false，
+			       如果cacheEnabled=false，那么就算单个的mapper开启了二级缓存，也不会有效
+			1、当全局的二级缓存设置为打开时，
+				在Mapper xml中配置的单个的mapper的二级缓存默认为关闭的，此时不会缓存。
+			2、当全局的二级缓存设置为打开时，
+				在Mapper xml中配置的单个的mapper的二级缓存设置为打开时，此时开启二级缓存。
+		 -->
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
+</configuration>

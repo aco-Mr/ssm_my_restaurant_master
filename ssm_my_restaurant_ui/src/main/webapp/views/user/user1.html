@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息</title>
+    <script src="/static/js/bootstrap/js/jquery/jquery-1.11.0.js" type="text/javascript" charset="UTF-8"></script>
+    <script type="text/javascript">
+        $(function () {
+            $.ajax({
+                url:'http://localhost:8080/user/findByUid',
+                data:{uid:2},
+                type:'get',
+                dataType:'json',
+                success:function (data) {
+                    $("#uid").html(data.uid);
+                    $("#uname").html(data.uname);
+                    $("#sex").html(data.sex);
+                    $("#tel").html(data.tel);
+                    var n = parseInt(data.vipState);
+                    if(n==1){
+                        $("#vipState").html("会员");
+                    }else{
+                        $("#vipState").html('非会员&nbsp;&nbsp;<a href="#" id="vip">注册会员</a>');
+                    }
+                    var date=new Date(data.loginTime);
+                    var time=date.getFullYear()+"/"+(date.getMonth()+1)+"/"+date.getDate() + "/ " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() ;
+                    $("#loginTime").html(time);
+                    var date1=new Date(data.registerTime) ;
+                    var time1=date1.getFullYear()+"/"+(date1.getMonth()+1)+"/"+date1.getDate();
+                    $("#registerTime").html(time1);
+
+                }
+            });
+            //我的收藏
+            $("#collect").click(function () {
+                var uid=$("#uid").html();
+                $("#collect").attr("href","http://localhost:8080/ui/views/collect/collect.html?uid="+uid);
+            });
+            //修改信息
+            $("#update").click(function () {
+                $("#uname").html('<input type="text" value="'+$("#uname").html()+'" id="uname1" />');
+                $("#sex").html('男&nbsp;&nbsp;<input type="radio" name="sex" value="1" checked="checked" id="sex1" />女&nbsp;&nbsp;<input type="radio" name="sex" value="2"/>')
+                $("#tel").html('<input type="text" value="'+$("#tel").html()+'" id="tel1" />');
+
+
+                //确认修改
+                $("#update1").click(function () {
+                    var uid =parseInt($("#uid").html());
+                    alert($("#sex1").val())
+                    $.ajax({
+                        url:'http://localhost:8080/user/updateUser',
+                        data:{uid:uid},
+                        //,uname:$("#uname1").val(),sex:$("#sex1").val(),tel:$("#tel1").val()
+                        type:'get',
+                        dataType:'json',
+                        success:function (data) {
+                            alert("成功")
+                        }
+                    });
+                });
+            });
+
+
+        });
+
+    </script>
+</head>
+<body>
+    <table border="1">
+        <tr hidden>
+            <td>编号</td>
+            <td id="uid"></td>
+        </tr>
+        <tr>
+            <td>姓名</td>
+            <td id="uname"></td>
+        </tr>
+        <tr>
+            <td>性别</td>
+            <td id="sex"></td>
+        </tr>
+        <tr>
+            <td>电话号码</td>
+            <td id="tel"></td>
+        </tr>
+        <tr>
+            <td>会员状态</td>
+            <td id="vipState"></td>
+        </tr>
+        <tr>
+            <td>登录时间</td>
+            <td id="loginTime"></td>
+        </tr>
+        <tr>
+            <td>注册时间</td>
+            <td id="registerTime"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><a href="#" id="collect">我的收藏</a></td>
+        </tr>
+    </table>
+    <input type="button" id="update" value="修改信息" />
+    <input type="button" id="update1" value="确认修改" />
+    <a href="#" id="bill">我的账单</a>
+</body>
+</html>

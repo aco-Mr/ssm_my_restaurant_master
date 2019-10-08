@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aco.my.restaurant.user.mapper.AGoodsMapper">
+  <resultMap id="BaseResultMap" type="com.my.restaurant.domain.po.AGoods">
+    <!--@mbg.generated-->
+    <id column="gid" jdbcType="INTEGER" property="gid" />
+    <result column="gname" jdbcType="VARCHAR" property="gname" />
+    <result column="gtype" jdbcType="VARCHAR" property="gtype" />
+    <result column="gimag" jdbcType="VARCHAR" property="gimag" />
+    <result column="gaddtime" jdbcType="DATE" property="gaddtime" />
+    <result column="gdetails" jdbcType="VARCHAR" property="gdetails" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    gid, gname, gtype, gimag, gaddtime, gdetails
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from a_goods
+    where gid = #{gid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from a_goods
+    where gid = #{gid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="gid" keyProperty="gid" parameterType="com.my.restaurant.domain.po.AGoods" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into a_goods (gname, gtype, gimag, 
+      gaddtime, gdetails)
+    values (#{gname,jdbcType=VARCHAR}, #{gtype,jdbcType=VARCHAR}, #{gimag,jdbcType=VARCHAR}, 
+      #{gaddtime,jdbcType=DATE}, #{gdetails,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="gid" keyProperty="gid" parameterType="com.my.restaurant.domain.po.AGoods" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into a_goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="gname != null">
+        gname,
+      </if>
+      <if test="gtype != null">
+        gtype,
+      </if>
+      <if test="gimag != null">
+        gimag,
+      </if>
+      <if test="gaddtime != null">
+        gaddtime,
+      </if>
+      <if test="gdetails != null">
+        gdetails,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="gname != null">
+        #{gname,jdbcType=VARCHAR},
+      </if>
+      <if test="gtype != null">
+        #{gtype,jdbcType=VARCHAR},
+      </if>
+      <if test="gimag != null">
+        #{gimag,jdbcType=VARCHAR},
+      </if>
+      <if test="gaddtime != null">
+        #{gaddtime,jdbcType=DATE},
+      </if>
+      <if test="gdetails != null">
+        #{gdetails,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.my.restaurant.domain.po.AGoods">
+    <!--@mbg.generated-->
+    update a_goods
+    <set>
+      <if test="gname != null">
+        gname = #{gname,jdbcType=VARCHAR},
+      </if>
+      <if test="gtype != null">
+        gtype = #{gtype,jdbcType=VARCHAR},
+      </if>
+      <if test="gimag != null">
+        gimag = #{gimag,jdbcType=VARCHAR},
+      </if>
+      <if test="gaddtime != null">
+        gaddtime = #{gaddtime,jdbcType=DATE},
+      </if>
+      <if test="gdetails != null">
+        gdetails = #{gdetails,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where gid = #{gid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.my.restaurant.domain.po.AGoods">
+    <!--@mbg.generated-->
+    update a_goods
+    set gname = #{gname,jdbcType=VARCHAR},
+      gtype = #{gtype,jdbcType=VARCHAR},
+      gimag = #{gimag,jdbcType=VARCHAR},
+      gaddtime = #{gaddtime,jdbcType=DATE},
+      gdetails = #{gdetails,jdbcType=VARCHAR}
+    where gid = #{gid,jdbcType=INTEGER}
+  </update>
+
+
+
+  <resultMap id="findPriceResultMap" type="com.aco.my.restaurant.user.dto.GoodsDto">
+    <!--@mbg.generated-->
+    <id column="gid" jdbcType="INTEGER" property="gid" />
+    <result column="gname" jdbcType="VARCHAR" property="gname" />
+    <result column="gtype" jdbcType="VARCHAR" property="gtype" />
+    <result column="gimag" jdbcType="VARCHAR" property="gimag" />
+    <result column="gaddtime" jdbcType="DATE" property="gaddtime" />
+    <result column="gdetails" jdbcType="VARCHAR" property="gdetails" />
+
+    <association property="priceDto" resultMap="com.aco.my.restaurant.user.mapper.APriceMapper.BaseResultMap"/>
+  </resultMap>
+<!--  按菜品id查价格-->
+    <select id="findByGoodsId2"  resultMap="findPriceResultMap" >
+<!--      select g.gid g_gid, g.gname, g.gtype, g.gimag, g.gaddtime, g.gdetails-->
+<!--      from a_goods g-->
+<!--      where g.gid=#{gid}-->
+
+        select g.gid g_gid, g.gname, g.gtype, g.gimag, g.gaddtime, g.gdetails, p.pid, p.gid, p.ptime, p.price
+        from a_goods g left join a_price p on g.gid = p.gid
+        where g.gid=#{gid}
+
+    </select>
+
+
+
+
+
+  <resultMap id="findGoodsResultMap" type="com.aco.my.restaurant.user.dto.GoodsDto">
+    <!--@mbg.generated-->
+    <id column="gid" jdbcType="INTEGER" property="gid" />
+    <result column="gname" jdbcType="VARCHAR" property="gname" />
+    <result column="gtype" jdbcType="VARCHAR" property="gtype" />
+    <result column="gimag" jdbcType="VARCHAR" property="gimag" />
+    <result column="gaddtime" jdbcType="DATE" property="gaddtime" />
+    <result column="gdetails" jdbcType="VARCHAR" property="gdetails" />
+  </resultMap>
+</mapper>

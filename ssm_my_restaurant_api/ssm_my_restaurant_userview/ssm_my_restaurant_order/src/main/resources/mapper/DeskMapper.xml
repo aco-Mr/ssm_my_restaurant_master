@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mybatis sql映射文件 -->
+<!-- namespace：整合到spring之后，要求它的值必须与dao接口的全路径名一致 -->
+<mapper namespace="com.my.restaurant.api.od.dao.DeskDao">
+    <!-- 方法名与id对应 -->
+    <!-- 注意：sql后不能带分号 -->
+    <!--
+        1) id属性：方法名与id对应
+        2) resultType：配置结果类型，注意：列名要与属性名对应
+    -->
+
+    <select id="findRoomDesk" resultType="com.my.restaurant.api.od.dto.Desk" parameterType="int">
+        select * from a_desk where rid = #{rid}
+    </select>
+    <update id="updateStatue">
+        update a_desk set dstatue=1 where did=#{did}
+    </update>
+    <update id="resetStatue">
+        update a_desk set dstatue=0 where did=#{did}
+    </update>
+
+
+</mapper>

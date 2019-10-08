@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mybatis sql映射文件 -->
+<!-- namespace：整合到spring之后，要求它的值必须与dao接口的全路径名一致 -->
+<mapper namespace="com.aco.my.restaurant.user.dao.UserDao">
+    <select id="findByUserAll" parameterType="com.my.restaurant.domain.User" resultType="com.my.restaurant.domain.User">
+        select uid, uname, password, sex, tel, ustate, login_time, register_time from a_user
+        where 1=1
+        <if test="uname != null">
+            and uname like "%"#{uname}"%"
+        </if>
+        <if test="ustate != null">
+            and ustate=#{ustate}
+        </if>
+    </select>
+</mapper>

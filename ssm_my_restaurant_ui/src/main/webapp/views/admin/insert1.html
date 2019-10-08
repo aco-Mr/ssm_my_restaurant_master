@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>insert</title>
+	<script src="/static/js/bootstrap/js/jquery/jquery-1.8.3.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function () {
+			getDeskTab()
+			$("#rtype").change(function () {
+				var options = $("#rtype").children("option:selected").val();
+				if (options == 0) {
+					// $('#tab').html();
+					getDeskTab()
+				} else {
+					getRoomTab()
+				}
+			});
+		});
+		function getRoomRname() {
+            $.ajax({
+                url:'/admin_desk/room/findByName',
+                type:'post',
+                dataType:'json',
+                success:function (data) {
+                    if(data){
+                        $.each(data,function (i, ele) {
+                            $("#fid").append('<option value="'+ele.rid+'">'+ele.rname+'</option>')
+                        })
+                    }
+                }
+            })
+        }
+		function getDeskTab(){
+			$('#tab').html(
+					'<tr>\n' +
+					'\t\t\t\t\t    <td width="16%" align="right" nowrap="nowrap">餐桌容量:</td>\n' +
+					'\t\t\t\t\t\t  <td width="34%"><select id="dvolum" class="text" style="width:154px">\n' +
+					'\t\t\t\t\t\t<option>2</option>\n' +
+					'            <option>3</option>\n' +
+					'            <option>4</option>\n' +
+					'            <option>5</option>\n' +
+					'            <option>6</option>\n' +
+					'            <option>7</option>\n' +
+					'            <option>8</option>\n' +
+					'\t\t\t\t\t\t  </select></td>\n' +
+					'\t\t\t\t\t  </tr>\n' +
+					'\t\t\t\t\t\t  <tr>\n' +
+					'\t\t\t\t\t    <td nowrap="nowrap" align="right">餐桌状态:</td>\n' +
+					'\t\t\t\t\t\t  <td><select id="dstatue" class="text" style="width:154px">\n' +
+					'\t\t\t\t\t\t\t             <option value="0">空置</option>\n' +
+					'\t\t\t\t\t\t\t             <option value="1">使用中</option>\n' +
+					'\t\t\t\t\t\t\t         </select></td>\n' +
+					'\t\t\t\t\t  </tr>\n' +
+					'\t\t\t\t\t\t  <tr>\n' +
+					'\t\t\t\t\t    <td nowrap="nowrap" align="right">大厅名字:</td>\n' +
+					'\t\t\t\t\t\t  <td><select id="fid" class="text" style="width:154px">\n' +
+					'\t\t\t\t\t\t\t         </select></td>\n' +
+					'\t\t\t\t\t    </tr>' +
+					'<tr><td colspan="10" align="center" height="50px"><input type="button" value="保存" id="add" class="button" onclick="onInsertDesk()">\n' +
+					'\t\t\t\t\t\    <input type="button" value="返回" class="button" onclick="window.location.href=\'/ui/views/desk1.html\'"></td></tr>')
+                    getRoomRname();
+		}
+		function getRoomTab() {
+			$('#tab').html('<tr>\n' +
+					'\t\t\t\t\t    <td nowrap align="right" width="15%">包厢名字:</td>\n' +
+					'\t\t\t\t\t    <td width="35%"><input id="rname" type="text" class="text" style="width:154px"/>\n' +
+					'\t\t\t\t      </td>\n' +
+					'\t\t\t\t\t    <td width="16%" align="right" nowrap="nowrap">房间容量:</td>\n' +
+					'\t\t\t\t\t\t  <td width="34%"><select id="rsize" class="text" style="width:154px">\n' +
+					'\t\t\t\t\t\t\t  <option>15</option>\n' +
+					'\t\t\t\t\t\t\t  <option>20</option>\n' +
+					'\t\t\t\t\t\t  </select></td>\n' +
+					'\t\t\t\t\t  </tr>\n' +
+					'\t\t\t\t\t\t  <tr>\n' +
+					'\t\t\t\t\t    <td nowrap="nowrap" align="right">房间状态:</td>\n' +
+					'\t\t\t\t\t\t  <td><select id="rstatue" class="text" style="width:154px">\n' +
+					'\t\t\t\t\t\t\t             <option value="0">空置</option>\n' +
+					'\t\t\t\t\t\t\t             <option value="1">使用中</option>\n' +
+					'\t\t\t\t\t\t\t         </select></td>\n' +
+					'\t\t\t\t\t    <td width="16%" align="right" nowrap="nowrap">餐桌容量:</td>\n' +
+					'\t\t\t\t\t\t  <td width="34%"><select id="dvolum" class="text" style="width:154px">\n' +
+					'\t\t\t\t\t\t<option>2</option>\n' +
+					'            <option>3</option>\n' +
+					'            <option>4</option>\n' +
+					'            <option>5</option>\n' +
+					'            <option>6</option>\n' +
+					'            <option>7</option>\n' +
+					'            <option>8</option>\n' +
+					'\t\t\t\t\t\t  </select></td>\n' +
+					'\t\t\t\t\t  </tr>\n' +
+					'\t\t\t\t\t\t  <tr>\n' +
+					'\t\t\t\t\t    <td nowrap="nowrap" align="right">餐桌状态:</td>\n' +
+					'\t\t\t\t\t\t  <td><select id="dstatue" class="text" style="width:154px">\n' +
+					'\t\t\t\t\t\t\t             <option value="0">空置</option>\n' +
+					'\t\t\t\t\t\t\t             <option value="1">使用中</option>\n' +
+					'\t\t\t\t\t\t\t         </select></td>\n' +
+					'\t\t\t\t\t  </tr>\n' +
+					'\t\t\t\t\t\t  <tr>\n' +
+					'\t\t\t\t\t    <td align="right">房间描述:</td>\n' +
+					'\t\t\t\t\t    <td colspan="3"><textarea id="details" cols="100" rows="8"></textarea></td>\n' +
+					'\t\t\t\t\t    </tr>' +
+					'<tr><td colspan="10" align="center" height="50px"><input type="button" value="保存" id="add" class="button" onclick="onInsertRoom()">\n' +
+					'<input type="submit" value="返回" class="button" onclick="window.location.href=\'/ui/views/desk1.html\'"></td></tr>')
+		}
+		function onInsertDesk() {
+			if($("#dstatue").find("option:selected").text()=="空置"){
+				$("#dstatue").val()
+			}else{
+				$("#dstatue").val()
+			}
+			var desk = {dvolum: $("#dvolum").val(), dstatue: $("#dstatue").val(), fid: $("#fid").val()};
+			$.ajax({
+				url: '/admin_desk/desk/insert',
+				data: {desk: JSON.stringify(desk)},
+				type: 'post',
+				dataType: 'json',
+				success: function (data) {
+					alert("添加成功");
+					location.href="/ui/views/desk1.html"
+
+				}
+			})
+		}
+		function onInsertRoom() {
+			if($("#rtype").find("option:selected").text()=="大厅"){
+				$("#rtype").val()
+			}else{
+				$("#rtype").val()
+			}if($("#rstatue").find("option:selected").text()=="空置"){
+				$("#rstatue").val()
+			}else{
+				$("#rstatue").val()
+			}
+			if($("#dstatue").find("option:selected").text()=="空置"){
+				$("#dstatue").val()
+			}else{
+				$("#dstatue").val()
+			}
+			var room = {
+			    rname:$("#rname").val(),
+                rtype:$("#rtype").val(),
+                rsize:$("#rsize").val(),
+				rstatue:$("#rstatue").val(),
+                details:$("#details").val(),
+				deskList:[{
+					dvolum:$("#dvolum").val(),
+                    dstatue:$("#dstatue").val()
+			    }]
+				};
+			var roomDto = JSON.stringify(room)
+			$.ajax({
+				url:'/admin_desk/room/insert',
+				data:roomDto,
+				type:'post',
+				contentType:'application/json',
+				dataType:'json',
+				success:function () {
+					alert("添加成功");
+					location.href="/ui/views/desk1.html"
+				}
+			})
+		}
+
+	</script>
+
+<style type="text/css">
+
+.ContentBody{
+	background:#F6F6F6 url(../static/images/mainbg.gif);
+	/*url(../images/mainback.jpg) repeat-x fixed; */
+	margin:15px;}
+
+.CPanel{
+	padding:5px;
+	font-size:12px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+.TablePanel{
+	/* border:1px solid #999;*/
+	background-color:  #DBE0E6;
+}
+input.button{
+	background:#fff;border:1px solid #C28F27;padding:2px 2px 0px 2px;margin:4px;border-width:1px 3px 1px 3px;font-size: 12px;color: #A74300;
+}
+select{font-size:12px;}
+input.text{
+	border:1px solid #7F9DB9;font-size:12px;font-family: Verdana, Arial, Helvetica, sans-serif;height:18px
+}
+.tablestyle_title{
+	/*height: 20px; font-style: normal; font-variant: normal; font-weight: bold; font-size: 16px;letter-spacing: 2px; text-align: middle; border-top: 2px solid #ff7300; padding-left: 10px; background-color: #f0f0f0;text-align:center;*/
+	background:#6795B4;
+	padding:5px;
+	text-align:left;
+	color:#FFFFFF;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	height: 20px;
+	font-style: normal; font-variant: normal; font-weight: bold; font-size: 16px;letter-spacing: 2px; padding-left: 10px;
+}
+</style>
+</head>
+
+<body class="ContentBody">
+  <form action="" method="post" enctype="multipart/form-data" name="form" target="sypost" >
+<div class="MainDiv">
+<table width="99%" border="0" cellpadding="0" cellspacing="0" class="CContent">
+  <tr>
+      <th class="tablestyle_title" >座位添加页面</th>
+  </tr>
+  <tr>
+    <td class="CPanel">
+		
+		<table border="0" cellpadding="0" cellspacing="0" style="width:100%">
+			<tr align="center">
+				<td>房间类型<select id="rtype">
+					<option value="0" selected="selected">大厅</option>
+					<option value="1">包厢</option>
+				</select></td>
+			</tr>
+			<TR>
+			<TD width="100%">
+				<fieldset style="height:100%;">
+				<legend>添加内容</legend>
+					  <table id="tab" border="0" cellpadding="2" cellspacing="1" style="width:100%">
+					  </table>
+			  <br />
+				</fieldset>			</TD>
+		</TR>
+		</TABLE>
+	</td>
+  </tr>
+</TABLE>
+	</td>
+  </tr>
+	</table>
+</div>
+</form>
+</body>
+</html>

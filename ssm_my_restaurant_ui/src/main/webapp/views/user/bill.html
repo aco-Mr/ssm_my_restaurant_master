@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的账单</title>
+    <script src="/static/js/bootstrap/js/jquery/jquery-1.11.0.js" type="text/javascript" charset="UTF-8"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            let a=parseInt(oneValues());
+            $.ajax({
+                url: 'http://localhost:8080/user/findOrderByUser',
+                data: {uid:a},
+                type: 'get',
+                dataType: 'json',
+                success:function (data) {
+                    //订单编号
+                    let oid=data.orderDto.oid*1
+                    //客户数量
+                    let clientnums=data.orderDto.clientnums
+                    //茶位费
+                    let teafee=data.orderDto.teafee
+                    //总价
+                    let totalprice=data.orderDto.totalprice
+                    $("#totalprice").html(totalprice)
+                    $("#tbody").append('<tr>\n' +
+                        '                <td>茶水费</td>\n' +
+                        '                <td>'+clientnums+'</td>\n' +
+                        '                <td>'+teafee*clientnums+'</td>\n' +
+                        '            </tr>')
+
+                    //通过订单号查 订单菜品表
+                    $.ajax({
+                        url: 'http://localhost:8080/user/findGoodsIdByOrder',
+                        data: {oid:oid},
+                        type: 'get',
+                        dataType: 'json',
+                        success:function (data1) {
+                            if(data1.orderGoodsDto.length>0){
+                                $.each(data1.orderGoodsDto,function (i, ele) {
+                                    //菜品id
+                                    let gid=ele.gid*1;
+                                    //菜品数量
+                                    let gnums=ele.gnums*1;
+
+                                    //得到菜名
+                                    $.ajax({
+                                        url: 'http://localhost:8080/user/findGoods',
+                                        data: {oid:oid,gid:gid},
+                                        type: 'get',
+                                        dataType: 'json',
+                                        success:function (data2) {
+                                            //菜名
+                                            let gname=data2.gname;
+                                            // alert(gname);
+                                            //价格
+                                            let price =data2.priceDto.price;
+                                            // alert(price)
+
+                                            $("#tbody").append('<tr>\n' +
+                                                '                <td>'+gname+'</td>\n' +
+                                                '                <td>'+gnums+'</td>\n' +
+                                                '                <td>'+price*gnums+'</td>\n' +
+                                                '            </tr>')
+                                        }
+                                    });
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+            function oneValues(){
+                let result;
+                let url=window.location.search; //获取url中"?"符后的字串
+                if(url.indexOf("?")!=-1){
+                    result = url.substr(url.indexOf("=")+1);
+                }
+                return result;
+            }
+    </script>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <tr>
+                <td>菜名</td>
+                <td>数量</td>
+                <td>小计</td>
+            </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+    </table>
+    <div>应收&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="totalprice"></span></div>
+    <a href="http://localhost:8080/ui/views/user/user.html">返回</a>
+</body>
+</html>

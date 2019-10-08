@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aco.my.restaurant.user.mapper.AOrderMapper">
+  <resultMap id="BaseResultMap" type="com.my.restaurant.domain.po.AOrder">
+    <!--@mbg.generated-->
+    <id column="oid" jdbcType="INTEGER" property="oid" />
+    <result column="did" jdbcType="INTEGER" property="did" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="clientNums" jdbcType="INTEGER" property="clientnums" />
+    <result column="discount" jdbcType="DOUBLE" property="discount" />
+    <result column="teaFee" jdbcType="INTEGER" property="teafee" />
+    <result column="totalPrice" jdbcType="DOUBLE" property="totalprice" />
+    <result column="startDateTime" jdbcType="TIMESTAMP" property="startdatetime" />
+    <result column="eatStartTime" jdbcType="TIMESTAMP" property="eatstarttime" />
+    <result column="eatTime" jdbcType="INTEGER" property="eattime" />
+    <result column="payTime" jdbcType="TIMESTAMP" property="paytime" />
+    <result column="isPay" jdbcType="INTEGER" property="ispay" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    oid, did, `uid`, clientNums, discount, teaFee, totalPrice, startDateTime, eatStartTime, 
+    eatTime, payTime, isPay, `state`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from a_order
+    where oid = #{oid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from a_order
+    where oid = #{oid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="oid" keyProperty="oid" parameterType="com.my.restaurant.domain.po.AOrder" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into a_order (did, `uid`, clientNums, 
+      discount, teaFee, totalPrice, 
+      startDateTime, eatStartTime, eatTime, 
+      payTime, isPay, `state`
+      )
+    values (#{did,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{clientnums,jdbcType=INTEGER}, 
+      #{discount,jdbcType=DOUBLE}, #{teafee,jdbcType=INTEGER}, #{totalprice,jdbcType=DOUBLE}, 
+      #{startdatetime,jdbcType=TIMESTAMP}, #{eatstarttime,jdbcType=TIMESTAMP}, #{eattime,jdbcType=INTEGER}, 
+      #{paytime,jdbcType=TIMESTAMP}, #{ispay,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="oid" keyProperty="oid" parameterType="com.my.restaurant.domain.po.AOrder" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into a_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="did != null">
+        did,
+      </if>
+      <if test="uid != null">
+        `uid`,
+      </if>
+      <if test="clientnums != null">
+        clientNums,
+      </if>
+      <if test="discount != null">
+        discount,
+      </if>
+      <if test="teafee != null">
+        teaFee,
+      </if>
+      <if test="totalprice != null">
+        totalPrice,
+      </if>
+      <if test="startdatetime != null">
+        startDateTime,
+      </if>
+      <if test="eatstarttime != null">
+        eatStartTime,
+      </if>
+      <if test="eattime != null">
+        eatTime,
+      </if>
+      <if test="paytime != null">
+        payTime,
+      </if>
+      <if test="ispay != null">
+        isPay,
+      </if>
+      <if test="state != null">
+        `state`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="did != null">
+        #{did,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="clientnums != null">
+        #{clientnums,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null">
+        #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="teafee != null">
+        #{teafee,jdbcType=INTEGER},
+      </if>
+      <if test="totalprice != null">
+        #{totalprice,jdbcType=DOUBLE},
+      </if>
+      <if test="startdatetime != null">
+        #{startdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eatstarttime != null">
+        #{eatstarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eattime != null">
+        #{eattime,jdbcType=INTEGER},
+      </if>
+      <if test="paytime != null">
+        #{paytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ispay != null">
+        #{ispay,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.my.restaurant.domain.po.AOrder">
+    <!--@mbg.generated-->
+    update a_order
+    <set>
+      <if test="did != null">
+        did = #{did,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null">
+        `uid` = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="clientnums != null">
+        clientNums = #{clientnums,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null">
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="teafee != null">
+        teaFee = #{teafee,jdbcType=INTEGER},
+      </if>
+      <if test="totalprice != null">
+        totalPrice = #{totalprice,jdbcType=DOUBLE},
+      </if>
+      <if test="startdatetime != null">
+        startDateTime = #{startdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eatstarttime != null">
+        eatStartTime = #{eatstarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eattime != null">
+        eatTime = #{eattime,jdbcType=INTEGER},
+      </if>
+      <if test="paytime != null">
+        payTime = #{paytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ispay != null">
+        isPay = #{ispay,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where oid = #{oid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.my.restaurant.domain.po.AOrder">
+    <!--@mbg.generated-->
+    update a_order
+    set did = #{did,jdbcType=INTEGER},
+      `uid` = #{uid,jdbcType=INTEGER},
+      clientNums = #{clientnums,jdbcType=INTEGER},
+      discount = #{discount,jdbcType=DOUBLE},
+      teaFee = #{teafee,jdbcType=INTEGER},
+      totalPrice = #{totalprice,jdbcType=DOUBLE},
+      startDateTime = #{startdatetime,jdbcType=TIMESTAMP},
+      eatStartTime = #{eatstarttime,jdbcType=TIMESTAMP},
+      eatTime = #{eattime,jdbcType=INTEGER},
+      payTime = #{paytime,jdbcType=TIMESTAMP},
+      isPay = #{ispay,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER}
+    where oid = #{oid,jdbcType=INTEGER}
+  </update>
+
+  <resultMap id="OrderResultMap" type="com.aco.my.restaurant.user.dto.OrderDto">
+    <!--@mbg.generated-->
+    <id column="oid" jdbcType="INTEGER" property="oid" />
+    <result column="did" jdbcType="INTEGER" property="did" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="clientNums" jdbcType="INTEGER" property="clientnums" />
+    <result column="discount" jdbcType="DOUBLE" property="discount" />
+    <result column="teaFee" jdbcType="INTEGER" property="teafee" />
+    <result column="totalPrice" jdbcType="DOUBLE" property="totalprice" />
+    <result column="startDateTime" jdbcType="TIMESTAMP" property="startdatetime" />
+    <result column="eatStartTime" jdbcType="TIMESTAMP" property="eatstarttime" />
+    <result column="eatTime" jdbcType="INTEGER" property="eattime" />
+    <result column="payTime" jdbcType="TIMESTAMP" property="paytime" />
+    <result column="isPay" jdbcType="INTEGER" property="ispay" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+
+
+<!--  通过订单号查找菜品与价格-->
+  <resultMap id="findGoodsResultMap" type="com.aco.my.restaurant.user.dto.OrderDto">
+    <!--@mbg.generated-->
+    <id column="oid" jdbcType="INTEGER" property="oid" />
+    <result column="did" jdbcType="INTEGER" property="did" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="clientNums" jdbcType="INTEGER" property="clientnums" />
+    <result column="discount" jdbcType="DOUBLE" property="discount" />
+    <result column="teaFee" jdbcType="INTEGER" property="teafee" />
+    <result column="totalPrice" jdbcType="DOUBLE" property="totalprice" />
+    <result column="startDateTime" jdbcType="TIMESTAMP" property="startdatetime" />
+    <result column="eatStartTime" jdbcType="TIMESTAMP" property="eatstarttime" />
+    <result column="eatTime" jdbcType="INTEGER" property="eattime" />
+    <result column="payTime" jdbcType="TIMESTAMP" property="paytime" />
+    <result column="isPay" jdbcType="INTEGER" property="ispay" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+
+      <collection property="orderGoodsDto" resultMap="com.aco.my.restaurant.user.mapper.AOrderGoodsMapper.BaseResultMap"/>
+  </resultMap>
+
+  <select id="findGoodsIdByOrder" resultMap="findGoodsResultMap">
+    select aog.*
+    from  a_order ao left join a_order_goods aog on ao.oid = aog.oid
+    where ao.oid=#{oid}
+
+  </select>
+
+</mapper>

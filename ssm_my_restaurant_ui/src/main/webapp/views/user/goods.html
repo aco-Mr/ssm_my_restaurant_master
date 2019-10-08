@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>菜品信息</title>
+    <script src="/static/js/bootstrap/js/jquery/jquery-1.11.0.js" type="text/javascript" charset="UTF-8"></script>
+    <script type="text/javascript">
+        $(function () {
+            //接收一个值
+            var a= parseInt(oneValues());
+            $.ajax({
+                url:'http://localhost:8080/user/findByGoodsId',
+                data:{gid:a},
+                type:'get',
+                dataType:'json',
+                success:function (data) {
+                    $("#gid").html(data.gid);
+                    $("#gname").html(data.gname);
+                    $("#gtype").html(data.gtype);
+                    $("#gimag").html('<img src="../images/'+data.gimag+'" />');
+                    $("#price").html(data.priceDto.price+'元');
+                    var date=new Date(data.gaddtime);
+                    var time=date.getFullYear()+"/"+(date.getMonth()+1)+"/"+date.getDate();
+                    $("#gaddtime").html(time);
+                    $("#gdetails").html(data.gdetails);
+                }
+            });
+        });
+        function oneValues(){
+            var result;
+            var url=window.location.search; //获取url中"?"符后的字串
+            if(url.indexOf("?")!=-1){
+                result = url.substr(url.indexOf("=")+1);
+            }
+            return result;
+        }
+
+
+    </script>
+</head>
+<body>
+    <table border="1">
+        <tr hidden>
+            <td>菜品ID</td>
+            <td id="gid"></td>
+        </tr>
+        <tr>
+            <td>菜品名字</td>
+            <td id="gname"></td>
+        </tr>
+        <tr>
+            <td>菜品种类</td>
+            <td id="gtype"></td>
+        </tr>
+        <tr>
+
+            <td>菜品图片</td>
+            <td id="gimag"></td>
+        </tr>
+        <tr>
+            <td>菜品价格</td>
+            <td id="price"></td>
+        </tr>
+        <tr>
+            <td>更新时间</td>
+            <td id="gaddtime"></td>
+        </tr>
+        <tr>
+            <td>菜品描叙</td>
+            <td id="gdetails"></td>
+        </tr>
+    </table>
+    <a href="#" onclick="history.back(1)">返回</a>
+</body>
+</html>

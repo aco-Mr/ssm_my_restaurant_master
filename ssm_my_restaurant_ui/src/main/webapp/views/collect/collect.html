@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的收藏</title>
+    <script src="/static/js/bootstrap/js/jquery/jquery-1.11.0.js" type="text/javascript" charset="UTF-8"></script>
+    <script type="text/javascript">
+        $(function () {
+            //接收一个值
+               let a= parseInt(oneValues());
+            $.ajax({
+                url: 'http://localhost:8080/user/findCollect',
+                data: {uid:a},
+                type: 'get',
+                dataTpe: 'json',
+                success: function (data) {
+                    if(data.length>0){
+                        $.each(data,function (i, ele) {
+                            $("#tbody").append('<tr>\n' +
+                                '                <td class="collectId">'+ele.collectId+'</td>\n' +
+                                '                <td class="gid">'+ele.gid+'</td>\n' +
+                                '                <td><a href="#" class="goods">详情</a>&nbsp;&nbsp;' +
+                                '<a href="#" class="del">删除收藏</a></td>\n' +
+                                '            </tr>\n')
+                        })
+                    }
+                }
+            }) ;
+            //菜品详情
+            $(document).on("click",".goods",function () {
+                var gid = $(this).parents("tr").children(".gid").html();
+                $(this).attr("href","http://localhost:8080/ui/views/user/goods.html?gid="+gid);
+            });
+
+            $(document).on("click",".del",function () {
+                var id=$(this).parents("tr").children(".collectId").html();
+                var id1=parseInt(id)
+                if(confirm("确定删除？")){
+                    $(this).parents("tr").remove();
+                    $.ajax({
+                        url: 'http://localhost:8080/user/deleteCollect',
+                        data: {collectId:id1},
+                        type: 'get',
+                        dataTpe: 'json',
+                        success: function (data) {
+                        }
+                    });
+                }
+
+            });
+
+        });
+        function oneValues(){
+            var result;
+            var url=window.location.search; //获取url中"?"符后的字串
+            if(url.indexOf("?")!=-1){
+                result = url.substr(url.indexOf("=")+1);
+            }
+            return result;
+        }
+    </script>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <tr>
+                <td>编号</td>
+                <td>菜品ID</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+    </table>
+    <a href="http://localhost:8080/ui/views/user/user.html">返回</a>
+</body>
+</html>

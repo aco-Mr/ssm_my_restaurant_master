@@ -15,6 +15,10 @@
     <name>ssm_my_restaurant_admin Maven Webapp</name>
     <modules>
         <module>ssm_my_restaurant_goods</module>
+        <module>ssm_my_restaurant_admin_staff</module>
+        <module>ssm_my_restaurant_admin_user</module>
+        <module>ssm_my_restaurant_admin_desk</module>
+        <module>ssm_my_restaurant_admin_order</module>
     </modules>
 
 </project>

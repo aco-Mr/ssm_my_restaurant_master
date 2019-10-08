@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<title>订单管理系统</title>
+    <script src="/static/js/bootstrap/js/jquery/jquery-1.8.3.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(function () {
+            //初始化页面
+            onQuery(1);
+        });
+        $(function () {
+            //初始化页面
+            onQuery(1);
+            $("#btnQuery").click(function () {
+                var uname = $("#uname").val();
+                onQuery(1);
+            });
+        });
+        function onQuery(pageNum) {
+            // var json = {uname: $("#uname").val()};
+                var uname = $("#uname").val()
+                var val = 0;
+                if($("#startDateTime").find("option:selected").text()=="今天"){
+                     val=$("#startDateTime").val();
+                }else if($("#startDateTime").find("option:selected").text()=="昨天"){
+                     val=$("#startDateTime").val();
+                }else if($("#startDateTime").find("option:selected").text()=="三天前") {
+                     val = $("#startDateTime").val();
+                }else if($("#startDateTime").find("option:selected").text()=="一星期前") {
+                     val = $("#startDateTime").val();
+                }
+            $.ajax({
+                url: '/admin_order/order/list',
+                data: {uname:uname,val:val,pageNum: pageNum, pageSize: 2},
+                type: 'post',
+                dataType: 'json',
+                // contentType:'application/json',
+                success: function (data) {
+                    var html = [];
+                    // 1、判断数组中是否有数据
+                    if (data.list) {
+                        var trTemplate = $("#tfoot").html();
+                        $.each(data.list, function (i, ele) {
+                            var tr = trTemplate;
+                            tr = tr.replace(/{oid}/g, ele.oid);
+                            tr = tr.replace(/{did}/g, ele.did);
+                            tr = tr.replace(/{userId}/g, ele.userId);
+                            tr = tr.replace(/{uname}/g, ele.user.uname);
+                            tr = tr.replace(/{rname}/g, ele.room.rname);
+                            tr = tr.replace(/{clientNums}/g, ele.clientNums);
+                            tr = tr.replace(/{gname}/g, ele.goods.gname);
+                            tr = tr.replace(/{gimag}/g, ele.goods.gimag);
+                            tr = tr.replace(/{price}/g, ele.price.price);
+                            tr = tr.replace(/{gnums}/g, ele.orderandgoods.gnums);
+                            tr = tr.replace(/{discount}/g, ele.discount);
+                            tr = tr.replace(/{teaFee}/g, ele.teaFee);
+                            tr = tr.replace(/{totalPrice}/g, ele.totalPrice);
+                            tr = tr.replace(/{startDateTime}/g, ele.startDateTime);
+                            tr = tr.replace(/{eatStartTime}/g, ele.eatStartTime);
+                            tr = tr.replace(/{eatTime}/g, ele.eatTime);
+                            tr = tr.replace(/{payTime}/g, ele.payTime);
+                            if(ele.isPay==0){
+                                tr = tr.replace(/{isPay}/g, "是");
+                            }else if(ele.isPay==1){
+                                tr = tr.replace(/{isPay}/g, "否");
+                            }
+                            if(ele.state==0){
+                                tr = tr.replace(/{state}/g, "未处理");
+                            }else if(ele.state==1){
+                                tr = tr.replace(/{state}/g, "已完成");
+                            }else{
+                                tr = tr.replace(/{state}/g, "等待支付");
+                            }
+                            html.push(tr);
+                        })
+                    } else {
+                        html.push('<tr><td colspan="5">没有数据</td>');
+                    }
+                    // 2、将tr的数组的内容添加到tbody
+                    $("#tbody").html(html.join());
+                    // 3、保存相关的数据
+                    $("#lblPageNum").html(data.pageNum);
+                    $("#lblPages").html(data.pages);
+                    $("#lblPageSize").html(data.pageSize);
+                    $("#lblTotal").html(data.total);
+
+                    $("#pageInfos").html("");
+                    $.each(data.navigatepageNums, function (i, ele) {
+                        if (ele == data.pageNum) {
+                            $("#pageInfos").append('<a>' + ele + '</a>');
+                        } else {
+                            $("#pageInfos").append('<a href="javascript:onQuery(' + ele + ')">' + ele + '</a>');
+                        }
+                    });
+                }
+            })
+        }
+
+
+        // _type表示要做什么
+        // _type=1：跳到首页
+        function onJumpPage(_type) {
+            var pageNum = parseInt($("#lblPageNum").html());// 当前页码
+            var pages = parseInt($("#lblPages").html());// 总页码
+            if (_type == 1) {//首页
+                if (pageNum > 1) {
+                    onQuery(1);
+                }
+            } else if (_type == 2) {//上一页
+                if (pageNum > 1) {
+                    onQuery(pageNum - 1);
+                }
+            } else if (_type == 3) {//下一页
+                if (pageNum < pages) {
+                    onQuery(pageNum + 1);
+                }
+            } else if (_type == 4) {//末页
+                if (pageNum < pages) {
+                    onQuery(pages);
+                }
+            }
+        }
+    </script>
+  <style type="text/css">
+<!--
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+
+html { overflow-x: auto; overflow-y: auto; border:0;} 
+-->
+.CTitle{
+    background:#6795B4;
+    padding:5px;
+    text-align:left;
+    color:#FFFFFF;
+    font-size:13px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+.right-text09 {
+    font-family: Tahoma;
+    font-size: 11px;
+    font-weight: bold;
+    color: #F26521;
+    text-decoration: none;
+}
+.right-font08 {
+    font-family: "����";
+    font-size: 16px;
+    color: #555555;
+    text-decoration: none;
+}
+</style>
+</head>
+<body>
+<form name="fom" id="fom" method="post" action="">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  
+  <tr>
+    <td height="30">      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td height="62" background="/static/js/bootstrap/img/goods/nav04.gif">
+            
+		   <table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
+               <tr>
+                   <td width="21"><img src="/static/js/bootstrap/img/goods/ico07.gif" width="20" height="18"/></td>
+                   <td width="538">查找订单：  按用户姓名：
+                       <input type="text" id="uname"/>&nbsp;&nbsp;&nbsp;
+                       按下单时间：
+                        <select id="startDateTime">
+                            <option selected="selected" value="0">今天</option>
+                            <option value="1">昨天</option>
+                            <option value="3">三天前</option>
+                            <option value="7">一星期前</option>
+                        </select>
+                       &nbsp;&nbsp;&nbsp;<input id="btnQuery" type="button" class="right-button02" value="查 询"/></td>
+               </tr>
+          </table></td>
+        </tr>
+    </table></td></tr>
+  <tr>
+    <td><table id="subtree1"  width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+                <td height="40" class="font42">
+				<table width="100%" border="0" cellpadding="4" cellspacing="1" bgcolor="#464646" class="newfont03">
+                    <thead>
+				 <tr class="CTitle" >
+                    	<td height="22" colspan="20" align="center" style="font-size:16px">订单详细列表</td>
+                  </tr>
+                 <tr bgcolor="#EEEEEE">
+                     <td>订单编号</td>
+                     <td>餐桌编号</td>
+                     <td>用户编号</td>
+                     <td>用户名</td>
+                     <td>房间名字</td>
+                     <td>客户数量</td>
+                     <td>菜品名称</td>
+                     <td>菜品图片</td>
+                     <td>菜品价格</td>
+                     <td>菜品数量</td>
+                     <td>折扣</td>
+                     <td>茶位费</td>
+                     <td>总价</td>
+                     <td>下单时间</td>
+                     <td>就餐时间</td>
+                     <td>就餐时长</td>
+                     <td>买单时间</td>
+                     <td >是否支付</td>
+                     <td>状态</td>
+                  </tr>
+                    </thead>
+                    <tbody id="tbody">
+
+                    </tbody>
+                    <tfoot style="display: none" id="tfoot">
+                    <tr bgcolor="#FFFFFF">
+                        <td>{oid}</td>
+                        <td>{did}</td>
+                        <td>{userId}</td>
+                        <td>{uname}</td>
+                        <td>{rname}</td>
+                        <td>{clientNums}</td>
+                        <td>{gname}</td>
+                        <td>{gimag}</td>
+                        <td>{price}</td>
+                        <td>{gnums}</td>
+                        <td>{discount}</td>
+                        <td>{teaFee}</td>
+                        <td>{totalPrice}</td>
+                        <td>{startDateTime}</td>
+                        <td>{eatStartTime}</td>
+                        <td>{eatTime}</td>
+                        <td>{payTime}</td>
+                        <td>{isPay}</td>
+                        <td>{state}</td>
+                    </tr>
+                    </tfoot>
+            </table>
+                </td>
+          </table></tr>
+        <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+            <tr>
+                <td height="6"><img src="/static/js/bootstrap/img/goods/spacer.gif" width="1" height="1"/></td>
+            </tr>
+            <tr>
+                <td height="33">
+                    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="right-font08">
+                        <tr>
+                            <td width="50%">第 <label id="lblPageNum" class="right-text09"></label> 页 | 共 <label
+                                    id="lblPages" class="right-text09"></label> 页，
+                                每页显示 <label id="lblPageSize" class="right-text09"></label> 条,
+                                共 <label id="lblTotal" class="right-text09"></label> 条记录
+                            </td>
+                            <td width="50%" align="right">[<a href="javascript:onJumpPage(1)" class="right-font08">首页</a> | <a
+                                    href="javascript:onJumpPage(2)" class="right-font08">上一页</a>
+                                |   <label id="pageInfos" class="right-font08"></label>    | <a href="javascript:onJumpPage(3)" class="right-font08">下一页</a>
+                                | <a href="javascript:onJumpPage(4)" class="right-font08">末页</a>]
+                    </table>
+                </td>
+            </tr>
+        </table></td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+</form>
+</body>
+</html>

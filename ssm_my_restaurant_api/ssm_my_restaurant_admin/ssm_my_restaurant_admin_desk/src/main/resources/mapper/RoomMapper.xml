@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aco.my.restaurant.admin.desk.dao.RoomDao">
+  <resultMap id="BaseResultMap" type="com.aco.my.restaurant.admin.desk.dto.RoomDto">
+    <!--@mbg.generated-->
+    <id column="rid" jdbcType="INTEGER" property="rid" />
+    <result column="rname" jdbcType="VARCHAR" property="rname" />
+    <result column="rtype" jdbcType="INTEGER" property="rtype" />
+    <result column="rsize" jdbcType="INTEGER" property="rsize" />
+    <result column="rstatue" jdbcType="INTEGER" property="rstatue" />
+    <result column="details" jdbcType="VARCHAR" property="details" />
+
+    <association property="desks" column="fid" javaType="com.my.restaurant.domain.Desk">
+      <id column="did" property="did"/>
+      <result column="dvolum" property="dvolum"/>
+      <result column="dstatue" property="dstatue"/>
+    </association>
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    rid, rname, rtype, rsize, rstatue, details
+  </sql>
+  <select id="findByCondition1" resultMap="BaseResultMap" parameterType="com.my.restaurant.domain.Room">
+    SELECT
+    r.*,d.*
+    FROM a_room r LEFT JOIN a_desk d ON d.fid = r.rid where r.rtype=#{rtype}
+<!--    where 1=1-->
+<!--    <if test="rtype != null">-->
+<!--      and rtype = #{rtype}-->
+<!--    </if>-->
+  </select>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from a_room
+    where rid = #{rid,jdbcType=INTEGER}
+  </select>
+
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from a_room
+    where rid = #{rid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.my.restaurant.domain.Room" useGeneratedKeys="true" keyColumn="rid" keyProperty="rid">
+    <!--@mbg.generated-->
+    insert into a_room ( rname, rtype,
+      rsize, rstatue, details
+      )
+    values (#{rname,jdbcType=VARCHAR}, #{rtype,jdbcType=INTEGER},
+      #{rsize,jdbcType=INTEGER}, #{rstatue,jdbcType=INTEGER}, #{details,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.my.restaurant.domain.Room">
+    <!--@mbg.generated-->
+    insert into a_room
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rid != null">
+        rid,
+      </if>
+      <if test="rname != null">
+        rname,
+      </if>
+      <if test="rtype != null">
+        rtype,
+      </if>
+      <if test="rsize != null">
+        rsize,
+      </if>
+      <if test="rstatue != null">
+        rstatue,
+      </if>
+      <if test="details != null">
+        details,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rid != null">
+        #{rid,jdbcType=INTEGER},
+      </if>
+      <if test="rname != null">
+        #{rname,jdbcType=VARCHAR},
+      </if>
+      <if test="rtype != null">
+        #{rtype,jdbcType=INTEGER},
+      </if>
+      <if test="rsize != null">
+        #{rsize,jdbcType=INTEGER},
+      </if>
+      <if test="rstatue != null">
+        #{rstatue,jdbcType=INTEGER},
+      </if>
+      <if test="details != null">
+        #{details,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.my.restaurant.domain.Room">
+    <!--@mbg.generated-->
+    update a_room
+    <set>
+      <if test="rname != null">
+        rname = #{rname,jdbcType=VARCHAR},
+      </if>
+      <if test="rtype != null">
+        rtype = #{rtype,jdbcType=INTEGER},
+      </if>
+      <if test="rsize != null">
+        rsize = #{rsize,jdbcType=INTEGER},
+      </if>
+      <if test="rstatue != null">
+        rstatue = #{rstatue,jdbcType=INTEGER},
+      </if>
+      <if test="details != null">
+        details = #{details,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where rid = #{rid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.my.restaurant.domain.Room">
+    <!--@mbg.generated-->
+    update a_room
+    set rname = #{rname,jdbcType=VARCHAR},
+      rtype = #{rtype,jdbcType=INTEGER},
+      rsize = #{rsize,jdbcType=INTEGER},
+      rstatue = #{rstatue,jdbcType=INTEGER},
+      details = #{details,jdbcType=VARCHAR}
+    where rid = #{rid,jdbcType=INTEGER}
+  </update>
+
+</mapper>

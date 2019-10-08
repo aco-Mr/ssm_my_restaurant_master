@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mybatis sql映射文件 -->
+<!-- namespace：整合到spring之后，要求它的值必须与dao接口的全路径名一致 -->
+<mapper namespace="com.aco.my.restaurant.staff.dao.StaffDao">
+    <!-- 注意：sql后不能带分号 -->
+    <!--
+        <select>：查询操作
+        1) id属性：方法名与id对应
+        2) resultType：配置结果类型，注意：列名要与属性名对应
+    -->
+    <select id="findById" resultType="com.my.restaurant.domain.Staff">
+        select sid, sname, ssex, sage, phone, scardid, saddress, did, shiredate, state, exitDate from a_staffinfo where sid=#{sid}
+    </select>
+
+
+    <!--staff是员工 department是部门-->
+    <resultMap id="staffResultMap" type="com.my.restaurant.domain.Staff">
+        <id property="sid" column="sid"/>
+        <result property="sname" column="sname"/>
+        <result property="ssex" column="ssex"/>
+        <result property="sage" column="sage"/>
+        <result property="scardid" column="scardid"/>
+        <result property="saddress" column="saddress"/>
+        <result property="did" column="did"/>
+        <result property="phone" column="phone"/>
+        <result property="shiredate" column="shiredate"/>
+        <result property="state" column="state"/>
+        <result property="exitDate" column="exitDate"/>
+
+        <association property="department" javaType="com.my.restaurant.domain.Department">
+            <id property="did" column="did"/>
+            <result property="dname" column="dname"/>
+        </association>
+    </resultMap>
+
+    <select id="findByCondition1" resultMap="staffResultMap" parameterType="com.my.restaurant.domain.Staff">
+        SELECT a.`sid`,
+        a.`sname`,
+        a.`ssex`,
+        a.`sage`,
+        a.`phone`,
+        a.`scardid`,
+        a.`saddress`,
+        b.*,
+        a.`shiredate`,
+        a.`state`,
+        a.`exitDate`
+        FROM a_staffinfo AS a LEFT JOIN a_department AS b ON a.`did` = b.`did` where 1=1
+        <if test="sid!=null">
+            and sid=#{sid}
+        </if>
+        <if test="sname != null">
+            and sname like "%"#{sname}"%"
+        </if>
+    </select>
+
+    <!--新增员工-->
+    <insert id="inserstaff" parameterType="com.my.restaurant.domain.Staff"
+        useGeneratedKeys="true" keyColumn="sid" keyProperty="sid">
+        insert into a_staffinfo(sname,ssex,sage,phone,scardid,saddress,did,shiredate,state,exitDate)
+        values(#{sname},#{ssex},#{sage},#{phone},#{scardid},#{saddress},#{did},#{shiredate},#{state},#{exitDate})
+    </insert>
+
+    <!--高级查询-->
+    <resultMap id="staffResultMap2" type="com.my.restaurant.domain.Staff">
+        <id property="sid" column="sid"/>
+        <result property="sname" column="sname"/>
+        <result property="ssex" column="ssex"/>
+        <result property="sage" column="sage"/>
+        <result property="scardid" column="scardid"/>
+        <result property="saddress" column="saddress"/>
+        <result property="did" column="did"/>
+        <result property="phone" column="phone"/>
+        <result property="shiredate" column="shiredate"/>
+        <result property="state" column="state"/>
+        <result property="exitDate" column="exitDate"/>
+
+        <association property="department" javaType="com.my.restaurant.domain.Department">
+            <id property="did" column="did"/>
+            <result property="dname" column="dname"/>
+        </association>
+
+        <association property="staffJob" javaType="com.my.restaurant.domain.StaffJob">
+            <id property="jid" column="jid"/>
+            <result property="jname" column="jname"/>
+        </association>
+    </resultMap>
+    <select id="findByCondition2" resultMap="staffResultMap2" parameterType="com.my.restaurant.domain.Staff">
+        SELECT c.`sid`,c.`sname`,c.`ssex`,c.`sage`,c.`phone`,c.`scardid`,c.`saddress`,c.`shiredate`,c.`state`,b.`jname`,d.`dname`,c.exitDate,d.did FROM a_staffandjob AS a
+						    LEFT JOIN a_job AS b ON a.`jid` = b.`jid`
+						    LEFT JOIN a_staffinfo AS c ON a.`sid`=c.`did`
+						    LEFT JOIN a_department AS d ON c.`did`=d.`did`
+        WHERE 1=1
+        <if test="sid!=null">
+            and c.sid=#{sid}
+        </if>
+        <if test="sname != null">
+            and c.sname like "%"#{sname}"%"
+        </if>
+    </select>
+
+
+    <!--修改员工信息-->
+    <update id="updateStaff" parameterType="com.my.restaurant.domain.Staff">
+        update a_staffinfo set
+        sname=#{sname},
+        ssex=#{ssex},
+        sage=#{sage},
+        phone=#{phone},
+        scardid=#{scardid},
+        did=#{did},
+        saddress=#{saddress},
+        shiredate=#{shiredate},
+        state=#{state}
+        where sid=#{sid}
+    </update>
+
+    <!--离职修改-->
+    <update id="quitStaff" parameterType="com.my.restaurant.domain.Staff">
+        update a_staffinfo set
+        state=#{state},
+        exitDate=#{exitDate}
+        where sid=#{sid}
+    </update>
+
+
+    <!-- 修改 -->
+<!--    <update id="deleteStudent" parameterType="int">-->
+<!--        delete from a_student where stuNo=#{stuNo}-->
+<!--    </update>-->
+
+</mapper>

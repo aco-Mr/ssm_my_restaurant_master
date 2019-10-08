@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mybatis sql映射文件 -->
+<!-- namespace：整合到spring之后，要求它的值必须与dao接口的全路径名一致 -->
+<mapper namespace="com.my.restaurant.api.od.dao.GoodsDao">
+    <!-- 方法名与id对应 -->
+    <!-- 注意：sql后不能带分号 -->
+    <!--
+        1) id属性：方法名与id对应
+        2) resultType：配置结果类型，注意：列名要与属性名对应
+    -->
+    <resultMap id="goodsMap" type="com.my.restaurant.api.od.dto.Goods">
+        <id property="gid" column="gid"/>
+        <result property="gname" column="gname"/>
+        <result property="gtype" column="gtype"/>
+        <result property="gimag" column="gimag"/>
+        <result property="gaddtime" column="gaddtime"/>
+        <result property="gstate" column="gstate"/>
+        <result property="gdetails" column="gdetails"/>
+        <collection property="prices" ofType="com.my.restaurant.api.od.dto.Price" column="gid">
+            <id property="pid" column="pid"/>
+            <result property="price" column="price"/>
+            <result property="ptime" column="ptime"/>
+        </collection>
+
+    </resultMap>
+
+    <select id="findAllStyle" resultType="com.my.restaurant.api.od.dto.Goods">
+        select  DISTINCT(gtype)  from a_goods
+    </select>
+
+    <select id="goodsByType" resultType="com.my.restaurant.api.od.dto.Goods" resultMap="goodsMap"
+            parameterType="String">
+      SELECT a.* FROM
+  (SELECT g.*,p.price,p.ptime FROM a_goods g RIGHT JOIN a_price p ON g.gid=p.gid
+        WHERE  g.gstate=0 and gtype LIKE #{gtype}) AS a
+WHERE NOT EXISTS(SELECT 1  FROM
+(SELECT g.*,p.price,p.ptime FROM a_goods g RIGHT JOIN a_price p ON g.gid=p.gid
+        WHERE  g.gstate=0 and gtype LIKE #{gtype} ) AS b
+WHERE b.gid=a.gid AND b.ptime>a.ptime)
+    </select>
+
+    <resultMap id="goodsMap1" type="com.my.restaurant.api.od.dto.Goods">
+        <id property="gid" column="gid"/>
+        <result property="gname" column="gname"/>
+        <result property="gtype" column="gtype"/>
+        <result property="gimag" column="gimag"/>
+        <result property="gaddtime" column="gaddtime"/>
+        <result property="gdetails" column="gdetails"/>
+        <collection property="orderAndGoods" ofType="com.my.restaurant.api.od.dto.OrderAndGoods" column="gid">
+            <result property="gnums" column="gnums"/>
+        </collection>
+        <collection property="prices" ofType="com.my.restaurant.api.od.dto.Price" column="gid">
+            <id property="pid" column="pid"/>
+            <result property="price" column="price"/>
+            <result property="ptime" column="ptime"/>
+        </collection>
+    </resultMap>
+    <select id="findByOrderId" resultType="com.my.restaurant.api.od.dto.Goods" resultMap="goodsMap1"
+            parameterType="integer">
+        SELECT a.* FROM
+        ( SELECT g.*,og.gnums,p.price,p.ptime
+        FROM a_goods g,a_orderandgoods og,a_price p
+        WHERE g.gid=og.gid AND g.gid=p.gid AND og.oid=#{oid}) AS a
+        WHERE NOT EXISTS(SELECT 1  FROM
+        ( SELECT g.*,og.gnums,p.price,p.ptime
+        FROM a_goods g,a_orderandgoods og,a_price p
+        WHERE g.gid=og.gid AND g.gid=p.gid AND og.oid=#{oid}) AS b
+        WHERE b.gid=a.gid AND b.ptime>a.ptime)
+    </select>
+    <select id="findGoodsByName" resultMap="goodsMap" resultType="com.my.restaurant.api.od.dto.Goods"  >
+        SELECT a.* FROM
+        (SELECT g.*,p.price,p.ptime FROM a_goods g RIGHT JOIN a_price p ON g.gid=p.gid
+        WHERE  g.gstate=0 and locate(#{gName},g .gname)>0 ) AS a
+        WHERE NOT EXISTS(SELECT 1  FROM
+        (SELECT g.*,p.price,p.ptime FROM a_goods g RIGHT JOIN a_price p ON g.gid=p.gid
+        WHERE  g.gstate=0 and locate(#{gName},g .gname)>0  ) AS b
+        WHERE b.gid=a.gid AND b.ptime>a.ptime)
+    </select>
+
+</mapper>
